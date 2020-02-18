@@ -6,7 +6,8 @@
     </button>
     <div class="collapse navbar-collapse" id="myNavbar">
         <div class="navbar-nav">
-            <a class="nav-item nav-link active" (click)="goToSignup()">SignUp <span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link active" [routerLink]="['/signup']">SignUp <span class="sr-only">(current)
+                </span></a>
         </div>
     </div>
 </nav>
@@ -15,24 +16,28 @@
 <div class="container">
     <h3 class="text-center" style="color: deepskyblue">Sign In to enter</h3><br>
     <div class="row">
+        <!-- image -->
         <div class="col-md-4">
             <img class="img-fluid" src="../../../assets/calendar.jpg" alt="image">
         </div>
+
         <div class="col-md-4 offset-md-2">
             <!-- beginning of signin form -->
-            <form>
+            <form #logInForm = "ngForm">
                 <div class="form-group">
                     <label for="inputEmail" class="sr-only">Email address</label>
-                    <input type="email" class="form-control" id="inputEmail" [(ngModel)]="email" name="email" aria-describedby="emailHelp"
-                        placeholder="Enter email" required autofocus>
+                    <input type="email" class="form-control" id="inputEmail" [(ngModel)]="email" name="email"
+                        aria-describedby="emailHelp" placeholder="Enter email" required autofocus>
                     <small id="emailHelp" class="form-text text-muted">Your email will never be shared.</small>
                 </div>
+
                 <div class="form-group">
                     <label for="inputPassword" class="sr-only">Password</label>
-                    <input type="password" class="form-control" id="inputPassword" [(ngModel)]="password" name="password" placeholder="Password" required>
+                    <input type="password" class="form-control" id="inputPassword" [(ngModel)]="password"
+                        name="password" placeholder="Password" (keydown)="loginUsingKeyPress($event)" required>
                 </div>
 
-                <button type="button" href="#" class="btn btn-outline-info">Sign In</button>
+                <button type="button" (click)="signIn()" class="btn btn-outline-info">Sign In</button>
             </form>
             <!-- end of sign in form -->
         </div>

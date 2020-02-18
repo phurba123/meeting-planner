@@ -1,0 +1,57 @@
+<nav class="navbar navbar-expand-lg navbar-dark " style="background: deepskyblue">
+    <a class="navbar-brand" href="#">Meeting-Planner</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar"
+        aria-controls="myNavbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="myNavbar">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link active" [routerLink]="['/login']">LogIn <span
+                    class="sr-only">(current)</span></a>
+        </div>
+    </div>
+</nav><br>
+<!-- end of navbar -->
+
+<div class="container">
+    <h3 class="text-center" style="color: deepskyblue">SignUp</h3>
+    <br>
+    <div class="row">
+        <div class='col-md-4 offset-md-4'>
+            <!-- beginning of signup form -->
+            <form>
+                <!-- firstName -->
+                <div class="form-group">
+                    <label for="inputFirstName" class="sr-only">FirstName</label>
+                    <input type="text" class="form-control" id="inputFirstName" name="firstName"
+                    [(ngModel)]="firstName" placeholder="FirstName" required autofocus>
+                </div>
+
+                <!-- LastName -->
+                <div class="form-group">
+                        <label for="inputLastName" class="sr-only">LastName</label>
+                        <input type="text" class="form-control" id="inputLastName" name="lastName"
+                        [(ngModel)]="lastName" placeholder="LastName" required>
+                    </div>
+
+                <!-- email -->
+                <div class="form-group">
+                    <label for="inputEmail" class="sr-only">Email address</label>
+                    <input type="email" class="form-control" id="inputEmail" [(ngModel)]="email" name="email"
+                        aria-describedby="emailHelp" placeholder="Enter email" required autofocus>
+                    <small id="emailHelp" class="form-text text-muted">Your email will never be shared.</small>
+                </div>
+
+                <!-- password -->
+                <div class="form-group">
+                    <label for="inputPassword" class="sr-only">Password</label>
+                    <input type="password" class="form-control" id="inputPassword" [(ngModel)]="password"
+                        name="password" placeholder="Password" required>
+                </div>
+
+                <button type="button" href="#" class="btn btn-outline-info">Sign Up</button>
+            </form>
+            <!-- end of signup form -->
+        </div>
+    </div>
+</div>

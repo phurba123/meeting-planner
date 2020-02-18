@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -8,19 +9,40 @@ import { Component, OnInit } from '@angular/core';
 export class LoginComponent implements OnInit {
 
   public email:any;
+  public password:any;
 
-  constructor() { }
+  constructor(
+    private toast:ToastrService
+  ) 
+  { }
 
   ngOnInit() {
   }
 
   public signIn():void{
-    // sign in related 
+    if(!this.email){
+      this.toast.error('enter email','no email provided');
+    }
+    else if(!this.password)
+    {
+      //toast
+    }
+    else{
+      //code for sign in
+    }
   }
 
-  public goToSignup()
+  public loginUsingKeyPress(event:any)
   {
-    //navigate to signup page
+    if(event.keyCode==13)
+    {
+      //navigate to user  or admin dashboard
+    }
   }
+
+  // public goToSignup()
+  // {
+  //   //navigate to signup page
+  // }
 
 }
