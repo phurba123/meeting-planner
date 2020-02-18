@@ -21,14 +21,15 @@ export class LoginComponent implements OnInit {
 
   public signIn():void{
     if(!this.email){
-      this.toast.error('enter email','no email provided');
+      this.toast.warning('email cannot be empty','enter email');
     }
     else if(!this.password)
     {
-      //toast
+      this.toast.warning('password cannot be empty','enter password')
     }
     else{
       //code for sign in
+      this.toast.success('lets go','logging in')
     }
   }
 
