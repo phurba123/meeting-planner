@@ -1,37 +1,38 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">Meeting-Planner</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar"
+        aria-controls="myNavbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="collapse navbar-collapse" id="myNavbar">
         <div class="navbar-nav">
-            <a class="nav-item nav-link active" href="#">SignUp <span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link active" (click)="goToSignup()">SignUp <span class="sr-only">(current)</span></a>
         </div>
     </div>
-</nav><br><br>
+</nav>
+<br>
 
 <div class="container">
-    <h3 class="text-center">Please Sign In</h3><br>
+    <h3 class="text-center">Sign In</h3><br>
     <div class="row">
         <div class="col-md-5">
             <!-- empty column -->
+            <img class="img-fluid" src="../../../assets/calendar.jpg" alt="image">
         </div>
         <div class="col-md-4">
-            <form>
+            <form #signInForm ="ngForm">
                 <div class="form-group">
-                    <label for="inputEmail">Email address</label>
-                    <input type="email" class="form-control" id="inputEmail" aria-describedby="emailHelp"
-                        placeholder="Enter email">
-                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
-                        else.</small>
+                    <label for="inputEmail" class="sr-only">Email address</label>
+                    <input type="email" class="form-control" id="inputEmail" [(ngModel)]="email" name="email" aria-describedby="emailHelp"
+                        placeholder="Enter email" required>
+                    <small id="emailHelp" class="form-text text-muted">Your email will never be shared.</small>
                 </div>
                 <div class="form-group">
-                    <label for="inputPassword">Password</label>
-                    <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+                    <label for="inputPassword" class="sr-only">Password</label>
+                    <input type="password" class="form-control" id="inputPassword" [(ngModel)]="password" name="password" placeholder="Password" required>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-outline-info">Submit</button>
             </form>
         </div>
 
