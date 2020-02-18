@@ -14,6 +14,10 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
+  public signIn():void{
+    // sign in related 
+  }
+
   public goToSignup()
   {
     //navigate to signup page
