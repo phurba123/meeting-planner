@@ -11,6 +11,8 @@ import {FormsModule} from '@angular/forms'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';//upto here
 
+import { RoleModule } from './role/role.module';
+
 
 
 @NgModule({
@@ -19,15 +21,16 @@ import { ToastrModule } from 'ngx-toastr';//upto here
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     UserModule,
     FormsModule,
+    RoleModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
       timeOut: 1500,
       positionClass: 'toast-top-right',
       preventDuplicates: true,
-    })
+    }),
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
