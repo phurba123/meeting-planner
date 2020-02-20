@@ -12,6 +12,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';//upto here
 
 import { RoleModule } from './role/role.module';
+import { ErrorsModule } from './errors/errors.module';
+import { UserService } from './user.service';
+import {HttpClientModule} from '@angular/common/http'
 
 
 
@@ -22,8 +25,10 @@ import { RoleModule } from './role/role.module';
   imports: [
     BrowserModule,
     UserModule,
+    ErrorsModule,
     FormsModule,
     RoleModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
       timeOut: 1500,
@@ -32,7 +37,7 @@ import { RoleModule } from './role/role.module';
     }),
     AppRoutingModule,
   ],
-  providers: [],
+  providers: [UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

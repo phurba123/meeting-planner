@@ -33,6 +33,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  //login using enterkey event
   public loginUsingKeyPress(event:any)
   {
     if(event.keyCode==13)

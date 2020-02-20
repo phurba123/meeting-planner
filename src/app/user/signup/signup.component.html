@@ -23,29 +23,39 @@
                 <!-- firstName -->
                 <div class="form-group">
                     <label for="inputFirstName" class="sr-only">FirstName</label>
-                    <input type="text" class="form-control" id="inputFirstName" name="firstName"
-                    [(ngModel)]="firstName" placeholder="FirstName" required autofocus>
+                    <input type="text" class="form-control" id="inputFirstName" name="firstName" [(ngModel)]="firstName"
+                        placeholder="FirstName" required autofocus>
                 </div>
 
                 <!-- LastName -->
                 <div class="form-group">
-                        <label for="inputLastName" class="sr-only">LastName</label>
-                        <input type="text" class="form-control" id="inputLastName" name="lastName"
-                        [(ngModel)]="lastName" placeholder="LastName" required>
-                    </div>
+                    <label for="inputLastName" class="sr-only">LastName</label>
+                    <input type="text" class="form-control" id="inputLastName" name="lastName" [(ngModel)]="lastName"
+                        placeholder="LastName" required>
+                </div>
 
-                    <!-- mobileNumber -->
+                <!-- userName -->
                 <div class="form-group">
-                        <label for="inputNumber" class="sr-only">Mobile</label>
-                        <input type="number" class="form-control" id="inputNumber" [(ngModel)]="mobileNumber" name="mobileNumber"
-                             placeholder="Enter mobileNumber" required autofocus>
-                    </div>
+                    <label for="inputUserName" class="sr-only">UserName</label>
+                    <input type="text" class="form-control" id="inputUserName" [(ngModel)]="userName" name="userName"
+                        placeholder="UserName" aria-describedby="userNameHelp" required>
+                    <small id="userNameHelp" class="form-text text-muted">enter admin at last to get
+                        a privilage of an admin
+                    </small>
+                </div>
+
+                <!-- mobileNumber -->
+                <div class="form-group">
+                    <label for="inputNumber" class="sr-only">Mobile</label>
+                    <input type="number" class="form-control" id="inputNumber" [(ngModel)]="mobileNumber"
+                        name="mobileNumber" placeholder="MobileNumber" required>
+                </div>
 
                 <!-- email -->
                 <div class="form-group">
                     <label for="inputEmail" class="sr-only">Email address</label>
                     <input type="email" class="form-control" id="inputEmail" [(ngModel)]="email" name="email"
-                        aria-describedby="emailHelp" placeholder="Enter email" required autofocus>
+                        aria-describedby="emailHelp" placeholder="Email" required>
                     <small id="emailHelp" class="form-text text-muted">Your email will never be shared.</small>
                 </div>
 
@@ -56,7 +66,7 @@
                         name="password" placeholder="Password" required>
                 </div>
 
-                <button type="button" href="#" class="btn btn-outline-info">Sign Up</button>
+                <button type="button" (click)="signUp()" class="btn btn-outline-info">Sign Up</button>
             </form>
             <!-- end of signup form -->
         </div>
