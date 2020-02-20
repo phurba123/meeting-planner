@@ -42,10 +42,19 @@ export class LoginComponent implements OnInit {
           {
             this.toast.success('You Are Logged In','Login Successfull');
 
-            setTimeout(()=>
-            {
-              this.router.navigate(['role/normal']);
-            })
+            //getting userName of user out of data
+            let userName = data.data.userDetails.userName;
+            console.log(userName);
+
+            let indexToSlice = (userName.length - 5);//for getting substring with last 5 character
+            let slicedUserName = userName.slice(indexToSlice);
+            console.log(slicedUserName)
+
+            this.routingWithRole(slicedUserName);
+            // setTimeout(()=>
+            // {
+            //   this.router.navigate(['role/normal']);
+            // })
           }
           else{
             this.toast.error('Some Error Occured','Login Error');
@@ -54,6 +63,17 @@ export class LoginComponent implements OnInit {
         , (err) => {
 
         })
+    }
+  }
+
+  //routes to admin/normalUser dashboard by checking condition
+  private routingWithRole(slicedUserName){
+    if(slicedUserName === 'admin' || slicedUserName === 'Admin')
+    {
+      this.router.navigate(['role/admin'])
+    }
+    else{
+      this.router.navigate(['role/user'])
     }
   }
 

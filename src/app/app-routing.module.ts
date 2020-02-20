@@ -13,7 +13,7 @@ const routes: Routes = [
   {path:'signup',component:SignupComponent},
 
   {path:'role/admin',component:AdminComponent},
-  {path:'role/normal',component:NormalComponent},
+  {path:'role/user',component:NormalComponent},
 
   {path:'**',component:PageNotFoundComponent}
 ];
