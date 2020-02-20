@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
-  public signIn():void{
+  public logIn():void{
     if(!this.email){
       this.toast.warning('email cannot be empty','enter email');
     }
@@ -28,8 +28,7 @@ export class LoginComponent implements OnInit {
       this.toast.warning('password cannot be empty','enter password')
     }
     else{
-      //code for sign in
-      this.toast.success('lets go','logging in')
+      
     }
   }
 
@@ -38,7 +37,7 @@ export class LoginComponent implements OnInit {
   {
     if(event.keyCode==13)
     {
-      //navigate to user  or admin dashboard
+      this.logIn();
     }
   }
 

@@ -25,4 +25,13 @@ export class UserService {
     return this.http.post(`${this.backendUrl}/signup`, params);
   }
   //end of signup
+  public logIn(data):Observable<any>
+  {
+    const params = new HttpParams()
+    .set('email',data.email)
+    .set('password',data.password)
+
+    return this.http.post(`${this.backendUrl}/login`,params);
+  }
+  
 }
