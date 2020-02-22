@@ -23,6 +23,7 @@
     "bootstrap": "^4.4.1",
     "date-fns": "^2.9.0",
     "jquery": "^3.4.1",
+    "ngx-cookie-service": "^2.3.0",
     "ngx-toastr": "^11.3.3",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",

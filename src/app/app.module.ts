@@ -15,6 +15,7 @@ import { RoleModule } from './role/role.module';
 import { ErrorsModule } from './errors/errors.module';
 import { UserService } from './user.service';
 import {HttpClientModule} from '@angular/common/http'
+import { CookieService } from 'ngx-cookie-service';
 
 
 
@@ -37,7 +38,7 @@ import {HttpClientModule} from '@angular/common/http'
     }),
     AppRoutingModule,
   ],
-  providers: [UserService],
+  providers: [UserService,CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

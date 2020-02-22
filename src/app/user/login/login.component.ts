@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../user.service';
 import { Router } from '@angular/router'
+import {CookieService} from 'ngx-cookie-service'
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private toast: ToastrService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private cookie:CookieService
   ) { }
 
   ngOnInit() {
@@ -39,16 +41,23 @@ export class LoginComponent implements OnInit {
       this.userService.logIn(user).subscribe(
         (data) => {
           if (data.status === 200) {
+            //console.log(data)
             this.toast.success('You Are Logged In', 'Login Successfull');
 
             //getting userName of user out of data
             let userName = data.data.userDetails.userName;
-            console.log(userName);
+            //console.log(userName);
+
+            //setting cookie
+            this.cookie.set('authToken',data.data.authToken);
+            this.cookie.set('receiverUserName',userName)
+            this.cookie.set('receiverUserId',data.data.userDetails.userId);
+            //end of setting cookie
 
             //to check if userName ends with admin or not
             let indexToSlice = (userName.length - 5);//for getting substring with last 5 character
             let slicedUserName = userName.slice(indexToSlice);
-            console.log(slicedUserName)
+            //console.log(slicedUserName)
 
             this.routingWithRole(slicedUserName);
 

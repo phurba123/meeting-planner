@@ -60,7 +60,7 @@ export class SignupComponent implements OnInit {
           }
           else
           {
-            console.log('some error')
+            this.toast.warning(data.message)
           }
         },
         (err) => {
