@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../user.service';
-import {Router} from '@angular/router'
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'app-login',
@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private toast: ToastrService,
     private userService: UserService,
-    private router:Router
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -38,44 +38,41 @@ export class LoginComponent implements OnInit {
 
       this.userService.logIn(user).subscribe(
         (data) => {
-          if(data.status === 200)
-          {
-            this.toast.success('You Are Logged In','Login Successfull');
+          if (data.status === 200) {
+            this.toast.success('You Are Logged In', 'Login Successfull');
 
             //getting userName of user out of data
             let userName = data.data.userDetails.userName;
             console.log(userName);
 
+            //to check if userName ends with admin or not
             let indexToSlice = (userName.length - 5);//for getting substring with last 5 character
             let slicedUserName = userName.slice(indexToSlice);
             console.log(slicedUserName)
 
             this.routingWithRole(slicedUserName);
-            // setTimeout(()=>
-            // {
-            //   this.router.navigate(['role/normal']);
-            // })
+
           }
-          else{
-            this.toast.error('Some Error Occured','Login Error');
+          else {
+            this.toast.error(data.message, 'Login Error');
           }
         }
         , (err) => {
-
+          //console.log(err)
+          this.toast.error(err.error.message, 'Login Failed')
         })
     }
-  }
+  }//end of login function
 
   //routes to admin/normalUser dashboard by checking condition
-  private routingWithRole(slicedUserName){
-    if(slicedUserName === 'admin' || slicedUserName === 'Admin')
-    {
+  private routingWithRole(slicedUserName) {
+    if (slicedUserName === 'admin' || slicedUserName === 'Admin') {
       this.router.navigate(['role/admin'])
     }
-    else{
+    else {
       this.router.navigate(['role/user'])
     }
-  }
+  }//end
 
   //login using enterkey event
   public loginUsingKeyPress(event: any) {
@@ -83,10 +80,5 @@ export class LoginComponent implements OnInit {
       this.logIn();
     }
   }
-
-  // public goToSignup()
-  // {
-  //   //navigate to signup page
-  // }
 
 }
