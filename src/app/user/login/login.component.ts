@@ -54,6 +54,9 @@ export class LoginComponent implements OnInit {
             this.cookie.set('receiverUserId',data.data.userDetails.userId);
             //end of setting cookie
 
+            //setting userInfo on local storage
+            this.userService.setUserInfoOnLocalStorage(data.data.userDetails);
+
             //to check if userName ends with admin or not
             let indexToSlice = (userName.length - 5);//for getting substring with last 5 character
             let slicedUserName = userName.slice(indexToSlice);

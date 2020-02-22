@@ -4,7 +4,8 @@ import { AdminComponent } from './admin/admin.component';
 import { NormalComponent } from './normal/normal.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
-import {RouterModule} from '@angular/router'
+import {RouterModule} from '@angular/router';
+import {FormsModule} from '@angular/forms'
 
 
 
@@ -14,6 +15,7 @@ import {RouterModule} from '@angular/router'
   imports: [
     CommonModule,
     RouterModule,
+    FormsModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory

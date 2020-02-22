@@ -25,6 +25,8 @@ export class UserService {
     return this.http.post(`${this.backendUrl}/signup`, params);
   }
   //end of signup
+
+  //for login
   public logIn(data):Observable<any>
   {
     const params = new HttpParams()
@@ -32,6 +34,18 @@ export class UserService {
     .set('password',data.password)
 
     return this.http.post(`${this.backendUrl}/login`,params);
+  }//end of login
+
+  //setting userInfo on local storage
+  public setUserInfoOnLocalStorage(data)
+  {
+    localStorage.setItem('userInfo',JSON.stringify(data))
+  }
+
+  //getting userInfo from local storage
+  public getUserInfoFromLocalStorage()
+  {
+    return localStorage.getItem('userInfo')
   }
   
 }

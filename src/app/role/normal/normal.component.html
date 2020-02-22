@@ -10,16 +10,87 @@
                 </span></a>
         </div>
     </div>
-</nav><br>
+</nav>
 
-<div class="container">
+<div class="container-fluid mt-1">
+    <!-- row-1 with two column -->
     <div class="row">
-        <div class="col-md-4">
-            <!--  -->
-        </div>
 
-        <div class="col-md-8">
-            this
+        <!-- row-1 first column -->
+        <div class="col-md-4">
+            <!-- empty column -->
         </div>
+        <!-- row-1 first column end -->
+
+        <!-- row-1 second column -->
+        <div class="col-md-8">
+
+            <div class="container">
+                <!-- row-2  -->
+                <div class="row">
+                    <!-- row-2 coloumn one -->
+                    <div class="col-md-4">
+                        <div class="btn-group">
+                            <div class="btn btn-outline-success" (click)="setView(CalendarView.Month)"
+                                [class.active]="view === CalendarView.Month">
+                                Month
+                            </div>
+                            <div class="btn btn-outline-success" (click)="setView(CalendarView.Week)"
+                                [class.active]="view === CalendarView.Week">
+                                Week
+                            </div>
+                            <div class="btn btn-outline-success" (click)="setView(CalendarView.Day)"
+                                [class.active]="view === CalendarView.Day">
+                                Day
+                            </div>
+                        </div>
+                    </div>
+                    <!-- row-2 column one end -->
+
+                    <!-- row-2 second column -->
+                    <div class="col-md-4">
+                        <h4>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h4>
+                    </div>
+                    <!-- row-2 second column end -->
+
+                    <!-- row-2 third and last column -->
+                    <div class="col-md-4">
+                        <div class="btn-group">
+                            <div class="btn btn-outline-success" mwlCalendarPreviousView [view]="view"
+                                [(viewDate)]="viewDate" (viewDateChange)="closeOpenMonthViewDay()">
+                                Previous
+                            </div>
+                            <div class="btn btn-outline-success" mwlCalendarToday [(viewDate)]="viewDate">
+                                Today
+                            </div>
+                            <div class="btn btn-outline-success px-4" mwlCalendarNextView [view]="view"
+                                [(viewDate)]="viewDate" (viewDateChange)="closeOpenMonthViewDay()">
+                                Next
+                            </div>
+                        </div>
+                    </div>
+                    <!-- row-2 third column end -->
+
+                </div>
+                <!-- row-2 end -->
+            </div>
+
+            <div [ngSwitch]='view'>
+                <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate"
+                    [activeDayIsOpen]="activeDayIsOpen">
+                </mwl-calendar-month-view>
+
+                <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate">
+                </mwl-calendar-week-view>
+
+                <mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" [viewDate]="viewDate">
+                </mwl-calendar-day-view>
+            </div>
+
+
+
+        </div>
+        <!-- row-1 second column end-->
+
     </div>
 </div>
