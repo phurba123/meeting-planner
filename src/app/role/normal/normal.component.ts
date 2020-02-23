@@ -5,7 +5,7 @@ import { Subject } from 'rxjs'
 import { UserService } from 'src/app/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { ThrowStmt } from '@angular/compiler';
+//import { ThrowStmt } from '@angular/compiler';
 
 const colors: any = {
   red: {
@@ -82,16 +82,15 @@ export class NormalComponent implements OnInit {
 
     this.userInfo = this.userService.getUserInfoFromLocalStorage()
 
-    if (this.userInfo.isAdmin == 'false') {
+    if (this.userService.isAdmin(this.receiverUserName)) {
 
+      
+    }
+    else {
       // this.verifyUserConfirmation()
       // this.authErrorFunction();
       // this.getUserAllMeetingFunction();
       // this.getUpdatesFromAdmin();
-    }
-    else {
-      //this.router.navigate(['/user/normal/meeting/dashboard']);
-
     }
 
     setInterval(() => {
@@ -110,6 +109,7 @@ export class NormalComponent implements OnInit {
   //logout function
   public logOut()
   {
+    console.log('inside logout')
     this.userService.logOut(this.authToken).subscribe(
       (apiResponse)=>
       {
@@ -126,6 +126,11 @@ export class NormalComponent implements OnInit {
           this.cookie.delete('authToken');
           this.cookie.delete('receiverUserId');
           this.cookie.delete('receiverUserName');
+        }
+        else
+        {
+          this.toastr.error(apiResponse['message'],'LogOut fail');
+          //this.router.navigate(['/login']);
         }
       },
       (error)=>

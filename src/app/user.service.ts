@@ -29,39 +29,50 @@ export class UserService {
   //end of signup
 
   //for login
-  public logIn(data):Observable<any>
-  {
+  public logIn(data): Observable<any> {
     const params = new HttpParams()
-    .set('email',data.email)
-    .set('password',data.password)
+      .set('email', data.email)
+      .set('password', data.password)
 
-    return this.http.post(`${this.backendUrl}/login`,params);
+    return this.http.post(`${this.backendUrl}/login`, params);
   }//end of login
 
   //for logout
-  public logOut(authToken)
-  {
+  public logOut(authToken) {
     let params = new HttpParams()
-    .set('authToken',authToken)
-    return this.http.post(`${this.backendUrl}/logout`,params);
+      .set('authToken', authToken)
+    return this.http.post(`${this.backendUrl}/logout`, params);
   }
 
   //setting userInfo on local storage
-  public setUserInfoOnLocalStorage(data)
-  {
-    localStorage.setItem('userInfo',JSON.stringify(data))
+  public setUserInfoOnLocalStorage(data) {
+    localStorage.setItem('userInfo', JSON.stringify(data))
   }
 
   //removing UserInfo From LocalStorage
-  public removeUserInfoFromLocalStorage()
-  {
+  public removeUserInfoFromLocalStorage() {
     localStorage.removeItem('userInfo');
   }
 
   //getting userInfo from local storage
-  public getUserInfoFromLocalStorage()
-  {
+  public getUserInfoFromLocalStorage() {
     return localStorage.getItem('userInfo')
   }
-  
+
+  //check if user is admin or not
+  public isAdmin(userName):boolean {
+    let name = userName;
+    //to check if userName ends with admin or not
+    let indexToSlice = (name.length - 5);//for getting substring with last 5 character
+    let slicedUserName = name.slice(indexToSlice);
+    //console.log(slicedUserName)
+
+    if (slicedUserName === 'admin' || slicedUserName === 'Admin') {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
 }
