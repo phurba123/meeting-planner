@@ -5,6 +5,7 @@ import { Subject } from 'rxjs'
 import { UserService } from 'src/app/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { ThrowStmt } from '@angular/compiler';
 
 const colors: any = {
   red: {
@@ -104,6 +105,34 @@ export class NormalComponent implements OnInit {
 
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
+  }
+
+  //logout function
+  public logOut()
+  {
+    this.userService.logOut(this.authToken).subscribe(
+      (apiResponse)=>
+      {
+        if(apiResponse['status']===200)
+        {
+          this.toastr.success('You are logged out','LogOut successfull');
+          setTimeout(()=>
+          {
+            this.router.navigate(['/login']);
+          },1000);
+          
+          //deleting local storage and cookies upon logout
+          this.userService.removeUserInfoFromLocalStorage();
+          this.cookie.delete('authToken');
+          this.cookie.delete('receiverUserId');
+          this.cookie.delete('receiverUserName');
+        }
+      },
+      (error)=>
+      {
+        console.log(error)
+      }
+    );
   }
 
 }

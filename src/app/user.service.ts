@@ -9,6 +9,8 @@ export class UserService {
 
   private backendUrl = 'http://localHost:3000/api/v1/user';
 
+  private authToken;
+
   constructor(private http: HttpClient) { }
   //end of constructor
 
@@ -36,10 +38,24 @@ export class UserService {
     return this.http.post(`${this.backendUrl}/login`,params);
   }//end of login
 
+  //for logout
+  public logOut(authToken)
+  {
+    let params = new HttpParams()
+    .set('authToken',authToken)
+    return this.http.post(`${this.backendUrl}/logout`,params);
+  }
+
   //setting userInfo on local storage
   public setUserInfoOnLocalStorage(data)
   {
     localStorage.setItem('userInfo',JSON.stringify(data))
+  }
+
+  //removing UserInfo From LocalStorage
+  public removeUserInfoFromLocalStorage()
+  {
+    localStorage.removeItem('userInfo');
   }
 
   //getting userInfo from local storage

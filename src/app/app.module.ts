@@ -32,7 +32,7 @@ import { CookieService } from 'ngx-cookie-service';
     HttpClientModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
-      timeOut: 1500,
+      timeOut: 2000,
       positionClass: 'toast-top-right',
       preventDuplicates: true,
     }),
