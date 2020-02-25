@@ -1,99 +1,107 @@
 <nav class="navbar navbar-expand-lg navbar-dark " style="background: deepskyblue">
-        <a class="navbar-brand font-weight-bold">Meeting-Planner<small class="font-weight-light"> -admin</small></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar" aria-controls="myNavbar"
-            aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="myNavbar">
-            <div class="navbar-nav ml-auto">
-                <a class="nav-item nav-link active" type="button" (click)="logOut()">Logout <span class="sr-only">(current)
-                    </span></a>
-            </div>
-        </div>
-    </nav>
-    
-    
-    
-    <div class="container-fluid mt-1">
-        <!-- row-1 with two column -->
-        <div class="row">
-    
-            <!-- row-1 first column -->
-            <div class="col-md-4 mt-md-4">
-                <p class="text-success" id="welcomemsg">Welcome {{receiverUserName}}</p>
-            </div>
-            <!-- row-1 first column end -->
-    
-            <!-- row-1 second column/last -->
-            <div class="col-md-7">
-    
-                <div class="container">
-                    <!-- row-2  -->
-                    <div class="row">
-                        <!-- row-2 coloumn one -->
-                        <div class="col-md-4">
-                            <div class="btn-group">
-                                <div class="btn btn-outline-success" (click)="setView(CalendarView.Month)"
-                                    [class.active]="view === CalendarView.Month">
-                                    Month
-                                </div>
-                                <div class="btn btn-outline-success" (click)="setView(CalendarView.Week)"
-                                    [class.active]="view === CalendarView.Week">
-                                    Week
-                                </div>
-                                <div class="btn btn-outline-success" (click)="setView(CalendarView.Day)"
-                                    [class.active]="view === CalendarView.Day">
-                                    Day
-                                </div>
-                            </div>
-                        </div>
-                        <!-- row-2 column one end -->
-    
-                        <!-- row-2 second column -->
-                        <div class="col-md-4">
-                            <h4>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h4>
-                        </div>
-                        <!-- row-2 second column end -->
-    
-                        <!-- row-2 third and last column/last -->
-                        <div class="col-md-4">
-                            <div class="btn-group">
-                                <div class="btn btn-outline-success" mwlCalendarPreviousView [view]="view"
-                                    [(viewDate)]="viewDate" (viewDateChange)="closeOpenMonthViewDay()">
-                                    Previous
-                                </div>
-                                <div class="btn btn-outline-success" mwlCalendarToday [(viewDate)]="viewDate">
-                                    Today
-                                </div>
-                                <div class="btn btn-outline-success px-4" mwlCalendarNextView [view]="view"
-                                    [(viewDate)]="viewDate" (viewDateChange)="closeOpenMonthViewDay()">
-                                    Next
-                                </div>
-                            </div>
-                        </div>
-                        <!-- row-2 third column/last end -->
-    
-                    </div>
-                    <!-- row-2 end -->
-                </div>
-    
-                <!--switching the view of calendar-->
-                <div [ngSwitch]='view'>
-                    <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate"
-                        [activeDayIsOpen]="activeDayIsOpen">
-                    </mwl-calendar-month-view>
-    
-                    <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate">
-                    </mwl-calendar-week-view>
-    
-                    <mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" [viewDate]="viewDate">
-                    </mwl-calendar-day-view>
-                </div>
-                <!-- switching the view of calendar end -->
-    
-            </div>
-            <!-- row-1 second column/last end-->
-    
+    <a class="navbar-brand font-weight-bold">Meeting-Planner<small class="font-weight-light"> -admin</small></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar" aria-controls="myNavbar"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="myNavbar">
+        <div class="navbar-nav ml-auto">
+            <a class="nav-item nav-link text-white" type="button" [routerLink]="['/meeting/create']">Create</a>
+            <a class="nav-item nav-link text-white" type="button" (click)="logOut()">Logout</a>
         </div>
     </div>
-    <!-- end of container-fluid -->
+</nav>
+
+
+
+<div class="container-fluid mt-1">
+    <!-- row-1 with two column -->
+    <div class="row">
+
+        <!-- row-1 first column -->
+        <div class="col-md-4 mt-md-4">
+            <p class="text-success" id="welcomemsg">Welcome {{receiverUserName}}</p>
+
+            <!-- displaying all users -->
+            <div *ngIf="allUsers">
+                <ul class="list-unstyled" *ngFor="let user of allUsers">
+                    <a type="button">{{user.userName}}</a>
+                </ul>
+            </div>
+
+        </div>
+        <!-- row-1 first column end -->
+
+        <!-- row-1 second column/last -->
+        <div class="col-md-7">
+
+            <div class="container">
+                <!-- row-2  -->
+                <div class="row">
+                    <!-- row-2 coloumn one -->
+                    <div class="col-md-4">
+                        <div class="btn-group">
+                            <div class="btn btn-outline-success" (click)="setView(CalendarView.Month)"
+                                [class.active]="view === CalendarView.Month">
+                                Month
+                            </div>
+                            <div class="btn btn-outline-success" (click)="setView(CalendarView.Week)"
+                                [class.active]="view === CalendarView.Week">
+                                Week
+                            </div>
+                            <div class="btn btn-outline-success" (click)="setView(CalendarView.Day)"
+                                [class.active]="view === CalendarView.Day">
+                                Day
+                            </div>
+                        </div>
+                    </div>
+                    <!-- row-2 column one end -->
+
+                    <!-- row-2 second column -->
+                    <div class="col-md-4">
+                        <h4>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h4>
+                    </div>
+                    <!-- row-2 second column end -->
+
+                    <!-- row-2 third and last column/last -->
+                    <div class="col-md-4">
+                        <div class="btn-group">
+                            <div class="btn btn-outline-success" mwlCalendarPreviousView [view]="view"
+                                [(viewDate)]="viewDate" (viewDateChange)="closeOpenMonthViewDay()">
+                                Prev
+                            </div>
+                            <div class="btn btn-outline-success" mwlCalendarToday [(viewDate)]="viewDate">
+                                Today
+                            </div>
+                            <div class="btn btn-outline-success" mwlCalendarNextView [view]="view"
+                                [(viewDate)]="viewDate" (viewDateChange)="closeOpenMonthViewDay()">
+                                Next
+                            </div>
+                        </div>
+                    </div>
+                    <!-- row-2 third column/last end -->
+
+                </div>
+                <!-- row-2 end -->
+            </div>
+
+            <!--switching the view of calendar-->
+            <div [ngSwitch]='view'>
+                <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate"
+                    [activeDayIsOpen]="activeDayIsOpen">
+                </mwl-calendar-month-view>
+
+                <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate">
+                </mwl-calendar-week-view>
+
+                <mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" [viewDate]="viewDate">
+                </mwl-calendar-day-view>
+            </div>
+            <!-- switching the view of calendar end -->
+
+        </div>
+        <!-- row-1 second column/last end-->
+
+    </div>
+</div>
+<!-- end of container-fluid -->

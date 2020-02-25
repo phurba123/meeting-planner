@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild,ElementRef } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service'
 import { CalendarEvent, CalendarView } from 'angular-calendar';
 import { Subject } from 'rxjs'
@@ -12,10 +12,13 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit {
+  @ViewChild('scroller', { read: ElementRef, static: false })
+  public scroller: ElementRef;
 
   private authToken;
   public receiverUserId;
   public receiverUserName;
+  public allUsers:string[];
 
   public activeDayIsOpen: boolean = true;
 
@@ -34,7 +37,24 @@ export class AdminComponent implements OnInit {
     this.authToken = this.cookie.get('authToken');
     this.receiverUserId = this.cookie.get('receiverUserId');
     this.receiverUserName = this.cookie.get('receiverUserName');
-    console.log(this.receiverUserName)
+    console.log(this.receiverUserName);
+    this.getAllUsers()
+
+
+  }
+
+  //getting all the users
+  public getAllUsers(){
+    this.userService.getAllUsers(this.authToken).subscribe(
+      (apiResponse)=>
+      {
+        this.allUsers = apiResponse.data;
+        console.log('all users',this.allUsers)
+      },
+      (error)=>
+      {
+        console.log('error while getting all users')
+      });
   }
 
   setView(view: CalendarView) {
@@ -55,11 +75,7 @@ export class AdminComponent implements OnInit {
             this.router.navigate(['/login']);
           }, 1000);
 
-          //deleting local storage and cookies upon logout
-          this.userService.removeUserInfoFromLocalStorage();
-          this.cookie.delete('authToken');
-          this.cookie.delete('receiverUserId');
-          this.cookie.delete('receiverUserName');
+          this.deleteCookiesAndLocalStorage();
         }
         else{
           this.toastr.error(apiResponse['message'],'LogOut failed')
@@ -69,6 +85,15 @@ export class AdminComponent implements OnInit {
         console.log(error)
       }
     );
+  }
+
+  private deleteCookiesAndLocalStorage()
+  {
+    //deleting local storage and cookies upon logout
+    this.userService.removeUserInfoFromLocalStorage();
+    this.cookie.delete('authToken');
+    this.cookie.delete('receiverUserId');
+    this.cookie.delete('receiverUserName');
   }
 
 }

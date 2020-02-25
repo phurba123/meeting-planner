@@ -75,4 +75,9 @@ export class UserService {
     }
   }
 
+  //getting all the users
+  public getAllUsers(authToken):Observable<any>{
+    return this.http.get(`${this.backendUrl}/view/all?authToken=${authToken}`);
+  }
+
 }

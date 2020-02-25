@@ -5,6 +5,8 @@ import { SignupComponent } from './user/signup/signup.component';
 import { AdminComponent } from './role/admin/admin.component';
 import { NormalComponent } from './role/normal/normal.component';
 import { PageNotFoundComponent } from './errors/page-not-found/page-not-found.component';
+import { CreateComponent } from './meeting/create/create.component';
+import { UpdateComponent } from './meeting/update/update.component';
 
 // all routes in our application
 const routes: Routes = [
@@ -15,7 +17,10 @@ const routes: Routes = [
   {path:'role/admin',component:AdminComponent},
   {path:'role/user',component:NormalComponent},
 
-  {path:'**',component:PageNotFoundComponent}
+  {path:'meeting/create',component:CreateComponent},
+  {path:'meeting/update',component:UpdateComponent},
+
+  {path:'**',component:PageNotFoundComponent},
 ];
 
 @NgModule({

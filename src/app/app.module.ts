@@ -16,6 +16,7 @@ import { ErrorsModule } from './errors/errors.module';
 import { UserService } from './user.service';
 import {HttpClientModule} from '@angular/common/http'
 import { CookieService } from 'ngx-cookie-service';
+import { MeetingModule } from './meeting/meeting.module';
 
 
 
@@ -26,6 +27,7 @@ import { CookieService } from 'ngx-cookie-service';
   imports: [
     BrowserModule,
     UserModule,
+    MeetingModule,
     ErrorsModule,
     FormsModule,
     RoleModule,
