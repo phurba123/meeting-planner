@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark " style="background: deepskyblue">
     <a class="navbar-brand font-weight-bold" href="#">Meeting-Planner</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar"
-        aria-controls="myNavbar" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar" aria-controls="myNavbar"
+        aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="myNavbar">
@@ -24,7 +24,16 @@
                 <div class="form-group">
                     <label for="inputFirstName" class="sr-only">FirstName</label>
                     <input type="text" class="form-control" id="inputFirstName" name="firstName" [(ngModel)]="firstName"
-                        placeholder="FirstName" required autofocus>
+                        placeholder="FirstName" required #inputFirstName="ngModel" autofocus>
+
+                    <!-- firstName validation -->
+                    <div *ngIf="inputFirstName.invalid && (inputFirstName.dirty||inputFirstName.touched)"
+                        class="alert alert-danger">
+                        <div *ngIf="inputFirstName.errors.required">
+                            FirstName is required
+                        </div>
+                    </div>
+                    <!-- end of firstName validation -->
                 </div>
 
                 <!-- LastName -->
@@ -38,10 +47,19 @@
                 <div class="form-group">
                     <label for="inputUserName" class="sr-only">UserName</label>
                     <input type="text" class="form-control" id="inputUserName" [(ngModel)]="userName" name="userName"
-                        placeholder="UserName" aria-describedby="userNameHelp" required>
-                    <small id="userNameHelp" class="form-text text-muted">enter admin at last to get
+                        placeholder="UserName" aria-describedby="userNameHelp" #inputUserName="ngModel" required>
+                    <small id="userNameHelp" class="form-text text-muted">*Enter admin at last to get
                         a privilage of an admin
                     </small>
+
+                    <!-- userName validation -->
+                    <div *ngIf="inputUserName.invalid && (inputUserName.dirty||inputUserName.touched)"
+                        class="alert alert-danger">
+                        <div *ngIf="inputUserName.errors.required">
+                            UserName is required
+                        </div>
+                    </div>
+                    <!-- end of userName validation -->
                 </div>
 
                 <!-- mobileNumber -->
@@ -55,18 +73,40 @@
                 <div class="form-group">
                     <label for="inputEmail" class="sr-only">Email address</label>
                     <input type="email" class="form-control" id="inputEmail" [(ngModel)]="email" name="email"
-                        aria-describedby="emailHelp" placeholder="Email" required>
+                        aria-describedby="emailHelp" placeholder="Email" #inputEmail="ngModel" required>
                     <small id="emailHelp" class="form-text text-muted">Your email will never be shared.</small>
+
+                    <!-- email validation -->
+                    <div *ngIf="inputEmail.invalid && (inputEmail.dirty||inputEmail.touched)"
+                        class="alert alert-danger">
+                        <div *ngIf="inputEmail.errors.required">
+                            Email is required
+                        </div>
+                    </div>
+                    <!-- end of email validation -->
                 </div>
 
                 <!-- password -->
                 <div class="form-group">
                     <label for="inputPassword" class="sr-only">Password</label>
                     <input type="password" class="form-control" id="inputPassword" [(ngModel)]="password"
-                        name="password" placeholder="Password" required>
+                        name="password" #inputPassword="ngModel" placeholder="Password" minlength="8" required>
+
+                    <!-- password validation -->
+                    <div *ngIf="inputPassword.invalid && (inputPassword.dirty || inputPassword.touched)"
+                        class="alert alert-danger">
+
+                        <div *ngIf="inputPassword.errors.required">
+                            Password is required.
+                        </div>
+                        <div *ngIf="inputPassword.errors.minlength">
+                            Password must be at least 8 characters long.
+                        </div>
+                    </div>
+                    <!-- password validation end -->
                 </div>
 
-                <button type="button" (click)="signUp()" class="btn btn-outline-info">Sign Up</button>
+                <button type="button" (click)="signUp()" class="btn btn-info">Sign Up</button>
             </form>
             <!-- end of signup form -->
         </div>
