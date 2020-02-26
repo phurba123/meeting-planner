@@ -1,4 +1,4 @@
-import { Component, OnInit,ViewChild,ElementRef } from '@angular/core';
+import { Component, OnInit,ViewChild,ElementRef, OnDestroy } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service'
 import { CalendarEvent, CalendarView } from 'angular-calendar';
 import { Subject } from 'rxjs'
@@ -11,14 +11,17 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.css']
 })
-export class AdminComponent implements OnInit {
-  @ViewChild('scroller', { read: ElementRef, static: false })
-  public scroller: ElementRef;
+export class AdminComponent implements OnInit ,OnDestroy{
+  ngOnDestroy(): void {
+    console.log('inside on Destroy')
+  }
+  // @ViewChild('scroller', { read: ElementRef, static: false })
+  // public scroller: ElementRef;
 
   private authToken;
   public receiverUserId;
   public receiverUserName;
-  public allUsers:string[];
+  public allUsers:any
 
   public activeDayIsOpen: boolean = true;
 
@@ -34,11 +37,16 @@ export class AdminComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log('inside on init')
     this.authToken = this.cookie.get('authToken');
     this.receiverUserId = this.cookie.get('receiverUserId');
     this.receiverUserName = this.cookie.get('receiverUserName');
-    console.log(this.receiverUserName);
-    this.getAllUsers()
+
+    setTimeout(()=>
+    {
+      this.getAllUsers()
+    },100)
+    
 
 
   }
@@ -95,5 +103,7 @@ export class AdminComponent implements OnInit {
     this.cookie.delete('receiverUserId');
     this.cookie.delete('receiverUserName');
   }
+
+  
 
 }

@@ -1,1 +1,72 @@
-<p>update works!</p>
+<nav class="navbar navbar-expand-lg navbar-dark " style="background: deepskyblue">
+    <a class="navbar-brand font-weight-bold" href="#">Meeting-Planner</a>
+</nav>
+
+<div class="container-fluid ">
+    <div class="row">
+
+        <div class="col-3">
+            <!-- empty col -->
+        </div>
+
+        <div class="col-md-6 col-sm-12 mt-2">
+            <div class="card border-info">
+                <div class="card-body">
+                    <h5 class="card-title text-success">Update Meeting</h5>
+                    <small class="card-text text-muted">Edit forms to update meeting</small>
+                    <br><br>
+
+                    <!-- form begins -->
+                    <form>
+                        <div class="form-group">
+                            <label class="sr-only" for="meetingTopic">Title</label>
+                            <input type="text" class="form-control" id="meetingTopic" placeholder="Meeting Topic">
+                        </div>
+
+                        <div class="form-group" *ngIf="allUsers">
+                            <label class="sr-only" for="nameSelect">preference</label>
+                            <select class="custom-select" id="nameSelect">
+                                <option selected>Choose...</option>
+                                <option *ngFor="let user of allUsers" value="user.userName">{{user.userName}}
+                                </option>
+                            </select>
+                            <small class="form-text text-muted">select user</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="sr-only" for="description">description</label>
+                            <input type="text" class="form-control" id="description" placeholder="Meeting Description">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="sr-only" for="meetingStartDate">Start Date</label>
+                            <input type="date" class="form-control" id="meetingStartDate">
+
+                            <small class="form-text text-muted">Meeting start date</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="sr-only" for="meetingEndDate">End Date</label>
+                            <input type="date" class="form-control" id="meetingEndDate">
+                            <small class="form-text text-muted">Meeting end date</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="sr-only" for="meetingPlace">meeting place</label>
+                            <input type="text" class="form-control" id="meetingPlace" placeholder="Meeting Place">
+                        </div><br>
+
+                        <div class="row justify-content-between">
+                            <button class="btn btn-outline-success">Create</button>
+                            <button class="btn btn-outline-success" (click)="goBack()">Back</button>
+                        </div>
+                    </form>
+                    <!-- form ends -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>

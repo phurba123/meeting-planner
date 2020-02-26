@@ -4,9 +4,11 @@
 
 <div class="container-fluid ">
     <div class="row">
-        <div class="col-3">
 
+        <div class="col-3">
+            <!-- empty col -->
         </div>
+
         <div class="col-md-6 col-sm-12 mt-2">
             <div class="card border-info">
                 <div class="card-body">
@@ -14,28 +16,52 @@
                     <small class="card-text text-muted">Fill forms to create new meeting</small>
                     <br><br>
 
-                    <div class="input-group">
-                        <form>
-                            <div class="form-group">
-                                <label class="sr-only" for="meetingTitle">Title</label>
-                                <input type="text" class="form-control" id="meetingTitle" placeholder="Meeting Title">
-                            </div>
+                    <!-- form begins -->
+                    <form>
+                        <div class="form-group">
+                            <label class="sr-only" for="meetingTopic">Title</label>
+                            <input type="text" class="form-control" id="meetingTopic" placeholder="Meeting Topic">
+                        </div>
 
-                            <div class="form-group">
-                                <label class="sr-only" for="meetingStartDate">Start Date</label>
-                                <input type="date" class="form-control" id="meetingStartDate">
+                        <div class="form-group" *ngIf="allUsers">
+                            <label class="sr-only" for="nameSelect">preference</label>
+                            <select class="custom-select" id="nameSelect">
+                                <option selected>Choose...</option>
+                                <option *ngFor="let user of allUsers" value="user.userName">{{user.userName}}
+                                </option>
+                            </select>
+                            <small class="form-text text-muted">select user</small>
+                        </div>
 
-                                <small class="form-text text-muted">Meeting start date</small>
-                            </div>
+                        <div class="form-group">
+                            <label class="sr-only" for="description">description</label>
+                            <input type="text" class="form-control" id="description" placeholder="Meeting Description">
+                        </div>
 
-                            <div class="form-group">
-                                <label class="sr-only" for="meetingEndDate">End Date</label>
-                                <input type="date" class="form-control" id="meetingEndDate">
-                                <small class="form-text text-muted">Meeting end date</small>
-                            </div>
-                        </form>
-                    </div>
-                    <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                        <div class="form-group">
+                            <label class="sr-only" for="meetingStartDate">Start Date</label>
+                            <input type="date" class="form-control" id="meetingStartDate">
+
+                            <small class="form-text text-muted">Meeting start date</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="sr-only" for="meetingEndDate">End Date</label>
+                            <input type="date" class="form-control" id="meetingEndDate">
+                            <small class="form-text text-muted">Meeting end date</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="sr-only" for="meetingPlace">meeting place</label>
+                            <input type="text" class="form-control" id="meetingPlace" placeholder="Meeting Place">
+                        </div><br>
+
+                        <div class="row justify-content-between">
+                            <button class="btn btn-outline-success">Create</button>
+                            <button class="btn btn-outline-success" (click)="goBack()">Back</button>
+                        </div>
+                    </form>
+                    <!-- form ends -->
                 </div>
             </div>
         </div>
