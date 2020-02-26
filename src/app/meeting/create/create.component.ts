@@ -3,6 +3,8 @@ import { UserService } from '../../user.service'
 import { CookieService } from 'ngx-cookie-service';
 import { Location } from '@angular/common'
 import { MeetingService } from 'src/app/meeting.service';
+import {ToastrService} from 'ngx-toastr';
+import {Router} from '@angular/router'
 
 @Component({
   selector: 'app-create',
@@ -28,7 +30,9 @@ export class CreateComponent implements OnInit {
     private userService: UserService,
     private cookie: CookieService,
     public location: Location,
-    private meetingService:MeetingService
+    private meetingService:MeetingService,
+    private toastr:ToastrService,
+    private router:Router
   ) { }
 
 
@@ -75,7 +79,24 @@ export class CreateComponent implements OnInit {
 
     }
 
-    this.meetingService.addNewMeeting(meetingObj)
+    this.meetingService.addNewMeeting(meetingObj).subscribe(
+      (apiResponse)=>
+      {
+        if(apiResponse['status']===200)
+        {
+          this.toastr.success('Meeting Created','Success');
+
+          setTimeout(()=>
+          {
+            this.router.navigate(['role/admin'])
+          },1000)
+        }
+      },
+      (err)=>
+      {
+        this.toastr.error(err,'Creation failed');
+      }
+    )
     //console.log(meetingObj)
   }
 

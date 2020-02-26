@@ -29,7 +29,7 @@ export class MeetingService {
     .set('meetingDescription',data.meetingDescription)
     .set('meetingPlace',data.meetingPlace)
 
-    this.http.post(this.baseUrl+'/addMeeting',params);
+    return this.http.post(this.baseUrl+'/addMeeting',params);
 
   }
 }
