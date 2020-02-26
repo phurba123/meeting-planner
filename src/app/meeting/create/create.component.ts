@@ -100,7 +100,6 @@ export class CreateComponent implements OnInit {
     //console.log(meetingObj)
   }
 
-
   //go back
   public goBack() {
     console.log('inside go back')

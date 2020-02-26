@@ -90,7 +90,8 @@
                 <div class="form-group">
                     <label for="inputPassword" class="sr-only">Password</label>
                     <input type="password" class="form-control" id="inputPassword" [(ngModel)]="password"
-                        name="password" #inputPassword="ngModel" placeholder="Password" minlength="8" required>
+                        name="password" #inputPassword="ngModel" placeholder="Password" minlength="8" 
+                        (keydown)="signUpUsingKeyPress($event)" required>
 
                     <!-- password validation -->
                     <div *ngIf="inputPassword.invalid && (inputPassword.dirty || inputPassword.touched)"

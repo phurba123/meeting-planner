@@ -40,6 +40,7 @@ export class LoginComponent implements OnInit {
 
       this.userService.logIn(user).subscribe(
         (data) => {
+          console.log(data.message)
           if (data.status === 200) {
             //console.log(data)
             this.toast.success('You Are Logged In', 'Login Successfull');
@@ -66,9 +67,6 @@ export class LoginComponent implements OnInit {
               this.router.navigate(['role/user'])
             }
 
-          }
-          else {
-            this.toast.error(data.message, 'Login Error');
           }
         }
         , (err) => {

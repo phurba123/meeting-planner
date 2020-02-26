@@ -71,4 +71,13 @@ export class SignupComponent implements OnInit {
   }
   //end of signup function
 
+  //signup with enter
+  public signUpUsingKeyPress(event)
+  {
+    if(event.keyCode === 13)
+    {
+      this.signUp();
+    }
+  }
+
 }
