@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CreateComponent } from './create/create.component';
 import { UpdateComponent } from './update/update.component';
-import {RouterModule} from '@angular/router'
+import {RouterModule} from '@angular/router';
+import {FormsModule} from '@angular/forms'
 
 
 
@@ -10,7 +11,8 @@ import {RouterModule} from '@angular/router'
   declarations: [CreateComponent, UpdateComponent],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    FormsModule
   ]
 })
 export class MeetingModule { }

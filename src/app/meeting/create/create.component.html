@@ -20,45 +20,54 @@
                     <form>
                         <div class="form-group">
                             <label class="sr-only" for="meetingTopic">Title</label>
-                            <input type="text" class="form-control" id="meetingTopic" placeholder="Meeting Topic">
+                            <input type="text" class="form-control" id="meetingTopic" placeholder="Meeting Topic"
+                                [(ngModel)]="topic" name="topic">
                         </div>
 
                         <div class="form-group" *ngIf="allUsers">
                             <label class="sr-only" for="nameSelect">preference</label>
-                            <select class="custom-select" id="nameSelect">
+                            <select class="custom-select" id="nameSelect" [(ngModel)]="selectedUserDetail"
+                                name="selectedUserDetail">
+
                                 <option selected>Choose...</option>
-                                <option *ngFor="let user of allUsers" value="user.userName">{{user.userName}}
+                                <option *ngFor="let user of allUsers" [ngValue]="user">
+                                    {{user.userName}}
                                 </option>
+
                             </select>
                             <small class="form-text text-muted">select user</small>
                         </div>
 
                         <div class="form-group">
                             <label class="sr-only" for="description">description</label>
-                            <input type="text" class="form-control" id="description" placeholder="Meeting Description">
+                            <input type="text" class="form-control" id="description" 
+                            placeholder="Meeting Description" [(ngModel)]="description" name="description">
                         </div>
 
                         <div class="form-group">
                             <label class="sr-only" for="meetingStartDate">Start Date</label>
-                            <input type="date" class="form-control" id="meetingStartDate">
+                            <input type="date" class="form-control" id="meetingStartDate"
+                            [(ngModel)]="startDate" name="startDate">
 
                             <small class="form-text text-muted">Meeting start date</small>
                         </div>
 
                         <div class="form-group">
                             <label class="sr-only" for="meetingEndDate">End Date</label>
-                            <input type="date" class="form-control" id="meetingEndDate">
+                            <input type="date" class="form-control" id="meetingEndDate"
+                            [(ngModel)]="endDate" name="endDate">
                             <small class="form-text text-muted">Meeting end date</small>
                         </div>
 
                         <div class="form-group">
                             <label class="sr-only" for="meetingPlace">meeting place</label>
-                            <input type="text" class="form-control" id="meetingPlace" placeholder="Meeting Place">
+                            <input type="text" class="form-control" id="meetingPlace" placeholder="Meeting Place"
+                            [(ngModel)]="meetingPlace" name="meetingPlace">
                         </div><br>
 
                         <div class="row justify-content-between">
-                            <button class="btn btn-outline-success">Create</button>
-                            <button class="btn btn-outline-success" (click)="goBack()">Back</button>
+                            <button class="btn btn-success" (click)="createMeeting()">Create</button>
+                            <button class="btn btn-success" (click)="goBack()">Back</button>
                         </div>
                     </form>
                     <!-- form ends -->
