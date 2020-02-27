@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpParams,HttpClient} from '@angular/common/http'
+import {Observable} from 'rxjs'
 
 @Injectable({
   providedIn: 'root'
@@ -32,4 +33,11 @@ export class MeetingService {
     return this.http.post(this.baseUrl+'/addMeeting',params);
 
   }
+
+ // app.get(`${baseUrl}/:userId/view/all`,controller.getAllMeetingsOfUser)
+
+  public getUserAllMeeting(userId,authToken): Observable<any> {
+    
+    return this.http.get(`${this.baseUrl}/${userId}/view/all?authToken=${authToken}`);
+  }//end getUsers function
 }

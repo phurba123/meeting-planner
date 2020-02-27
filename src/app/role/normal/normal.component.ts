@@ -6,6 +6,7 @@ import { UserService } from 'src/app/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { SocketService } from 'src/app/socket.service';
+import { MeetingService } from 'src/app/meeting.service';
 //import { ThrowStmt } from '@angular/compiler';
 
 const colors: any = {
@@ -71,7 +72,8 @@ export class NormalComponent implements OnInit {
     public _route: ActivatedRoute,
     public router: Router,
     private toastr: ToastrService,
-    private socketService: SocketService
+    private socketService: SocketService,
+    private meetingService:MeetingService
   ) { }
 
   ngOnInit(): void {
@@ -85,8 +87,10 @@ export class NormalComponent implements OnInit {
     this.userInfo = this.userService.getUserInfoFromLocalStorage()
 
     this.checkStatus();
+
     if (!this.userService.isAdmin(this.receiverUserName)) {
-      this.verifyUserConfirmation()
+      this.verifyUserConfirmation();
+      this.getUserAllMeetingFunction();
     }
     else {
       // this.verifyUserConfirmation()
@@ -154,6 +158,23 @@ export class NormalComponent implements OnInit {
     {
       this.socketService.setUser(this.authToken);
     })
+  }
+  getUserAllMeetingFunction(){
+    this.meetingService.getUserAllMeeting(this.receiverUserId,this.authToken).subscribe(
+    (apiResponse)=>
+    {
+      if(apiResponse.status === 404)
+      {
+        this.toastr.info(apiResponse.message);
+      }
+      else if(apiResponse.status === 200)
+      {
+        console.log(apiResponse.data);
+      }
+    }),(err)=>
+    {
+
+    };
   }
 
 }
