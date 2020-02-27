@@ -15,8 +15,8 @@ export class AdminComponent implements OnInit ,OnDestroy{
   ngOnDestroy(): void {
     console.log('inside on Destroy')
   }
-  // @ViewChild('scroller', { read: ElementRef, static: false })
-  // public scroller: ElementRef;
+  //  @ViewChild('scrollDiv', { read: ElementRef})
+  //  public scrollDiv: ElementRef;
 
   private authToken;
   public receiverUserId;

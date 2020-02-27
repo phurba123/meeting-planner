@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service'
-import { CalendarEvent,CalendarView } from 'angular-calendar';
+import { CalendarEvent, CalendarView } from 'angular-calendar';
 import { Subject } from 'rxjs'
 import { UserService } from 'src/app/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { SocketService } from 'src/app/socket.service';
 //import { ThrowStmt } from '@angular/compiler';
 
 const colors: any = {
@@ -70,6 +71,7 @@ export class NormalComponent implements OnInit {
     public _route: ActivatedRoute,
     public router: Router,
     private toastr: ToastrService,
+    private socketService: SocketService
   ) { }
 
   ngOnInit(): void {
@@ -82,9 +84,9 @@ export class NormalComponent implements OnInit {
 
     this.userInfo = this.userService.getUserInfoFromLocalStorage()
 
-    if (this.userService.isAdmin(this.receiverUserName)) {
-
-      
+    this.checkStatus();
+    if (!this.userService.isAdmin(this.receiverUserName)) {
+      this.verifyUserConfirmation()
     }
     else {
       // this.verifyUserConfirmation()
@@ -98,6 +100,19 @@ export class NormalComponent implements OnInit {
     }, 5000);//will check for every two minutes
   }
 
+  //function to check whether user is authorized to be on this component
+  public checkStatus = (): any =>
+  {
+    //using if condition to check if authToken is valid or not
+    if (this.authToken === null || this.authToken === '' || this.authToken === undefined || this.authToken !== this.cookie.get('authToken')) {
+      this.router.navigate(['/']);
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+
   setView(view: CalendarView) {
     this.view = view;
   }
@@ -107,37 +122,38 @@ export class NormalComponent implements OnInit {
   }
 
   //logout function
-  public logOut()
-  {
+  public logOut() {
     console.log('inside logout')
     this.userService.logOut(this.authToken).subscribe(
-      (apiResponse)=>
-      {
-        if(apiResponse['status']===200)
-        {
-          this.toastr.success('You are logged out','LogOut successfull');
-          setTimeout(()=>
-          {
+      (apiResponse) => {
+        if (apiResponse['status'] === 200) {
+          this.toastr.success('You are logged out', 'LogOut successfull');
+          setTimeout(() => {
             this.router.navigate(['/login']);
-          },1000);
-          
+          }, 1000);
+
           //deleting local storage and cookies upon logout
           this.userService.removeUserInfoFromLocalStorage();
           this.cookie.delete('authToken');
           this.cookie.delete('receiverUserId');
           this.cookie.delete('receiverUserName');
         }
-        else
-        {
-          this.toastr.error(apiResponse['message'],'LogOut fail');
+        else {
+          this.toastr.error(apiResponse['message'], 'LogOut fail');
           //this.router.navigate(['/login']);
         }
       },
-      (error)=>
-      {
+      (error) => {
         console.log(error)
       }
     );
+  }
+
+  verifyUserConfirmation() {
+    this.socketService.verifyUser().subscribe(()=>
+    {
+      this.socketService.setUser(this.authToken);
+    })
   }
 
 }

@@ -23,9 +23,9 @@
             <p class="text-success" id="welcomemsg">Welcome {{receiverUserName}}</p>
 
             <!-- displaying all users -->
-            <div *ngIf="allUsers">
-                <ul class="list-unstyled" *ngFor="let user of allUsers">
-                    <a type="button">{{user.userName}}</a>
+            <div id="scroller" *ngIf="allUsers">
+                <ul class="list-unstyled border" *ngFor="let user of allUsers">
+                    <a type="button" class="btn btn-info text-white">{{user.userName}}</a>
                 </ul>
             </div>
 
@@ -91,10 +91,11 @@
                     [activeDayIsOpen]="activeDayIsOpen">
                 </mwl-calendar-month-view>
 
-                <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate">
+                <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week"
+                [viewDate]="viewDate">
                 </mwl-calendar-week-view>
 
-                <mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" [viewDate]="viewDate">
+                <mwl-calendar-day-view  *ngSwitchCase="CalendarView.Day" [viewDate]="viewDate">
                 </mwl-calendar-day-view>
             </div>
             <!-- switching the view of calendar end -->

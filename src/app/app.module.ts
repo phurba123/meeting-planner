@@ -18,6 +18,7 @@ import {HttpClientModule} from '@angular/common/http'
 import { CookieService } from 'ngx-cookie-service';
 import { MeetingModule } from './meeting/meeting.module';
 import { MeetingService } from './meeting.service';
+import { SocketService } from './socket.service';
 
 
 
@@ -41,7 +42,7 @@ import { MeetingService } from './meeting.service';
     }),
     AppRoutingModule,
   ],
-  providers: [UserService,CookieService,MeetingService],
+  providers: [UserService,CookieService,MeetingService,SocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

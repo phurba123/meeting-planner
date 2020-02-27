@@ -1,0 +1,15 @@
+#scroller
+{
+    height: 80vh;
+    overflow-y: scroll;
+}
+
+
+@media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    #scroller
+    {
+        height: 40vh;
+        margin-bottom: 1vh
+    }
+  }

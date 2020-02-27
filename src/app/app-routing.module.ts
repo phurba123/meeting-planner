@@ -18,7 +18,7 @@ const routes: Routes = [
   {path:'role/user',component:NormalComponent},
 
   {path:'meeting/create',component:CreateComponent},
-  {path:'meeting/update',component:UpdateComponent},
+  {path:'meeting/:meetingId/update',component:UpdateComponent},
 
   {path:'**',component:PageNotFoundComponent},
 ];
