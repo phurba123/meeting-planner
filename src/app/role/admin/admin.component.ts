@@ -12,8 +12,9 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit ,OnDestroy{
+
   ngOnDestroy(): void {
-    console.log('inside on Destroy')
+    console.log('inside on Destroy');
   }
   //  @ViewChild('scrollDiv', { read: ElementRef})
   //  public scrollDiv: ElementRef;
@@ -38,14 +39,13 @@ export class AdminComponent implements OnInit ,OnDestroy{
 
   ngOnInit(): void {
     console.log('inside on init')
-    this.authToken = this.cookie.get('authToken');
-    this.receiverUserId = this.cookie.get('receiverUserId');
-    this.receiverUserName = this.cookie.get('receiverUserName');
+    let cookieObj= this.userService.getCookieData();
 
-    setTimeout(()=>
-    {
-      this.getAllUsers()
-    },100)
+    this.receiverUserId=cookieObj.receiverUserId;
+    this.receiverUserName=cookieObj.receiverUserName;
+    this.authToken=cookieObj.authToken
+
+    this.getAllUsers()
     
 
 
@@ -56,6 +56,7 @@ export class AdminComponent implements OnInit ,OnDestroy{
     this.userService.getAllUsers(this.authToken).subscribe(
       (apiResponse)=>
       {
+        console.log(apiResponse)
         this.allUsers = apiResponse.data;
         console.log('all users',this.allUsers)
       },
@@ -90,7 +91,7 @@ export class AdminComponent implements OnInit ,OnDestroy{
         }
       },
       (error) => {
-        console.log(error)
+        this.deleteCookiesAndLocalStorage()
       }
     );
   }
@@ -99,9 +100,9 @@ export class AdminComponent implements OnInit ,OnDestroy{
   {
     //deleting local storage and cookies upon logout
     this.userService.removeUserInfoFromLocalStorage();
-    this.cookie.delete('authToken');
-    this.cookie.delete('receiverUserId');
-    this.cookie.delete('receiverUserName');
+    this.cookie.delete('authToken','/')
+    this.cookie.delete('receiverUserId','/');
+    this.cookie.delete('receiverUserName','/');
   }
 
   

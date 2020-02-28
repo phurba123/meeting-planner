@@ -1,13 +1,14 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service'
 import { CalendarEvent, CalendarView } from 'angular-calendar';
+import { isSameMonth, isSameDay } from 'date-fns'
 import { Subject } from 'rxjs'
 import { UserService } from 'src/app/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { SocketService } from 'src/app/socket.service';
 import { MeetingService } from 'src/app/meeting.service';
-//import { ThrowStmt } from '@angular/compiler';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 const colors: any = {
   red: {
@@ -20,11 +21,6 @@ const colors: any = {
   },
   yellow: {
     primary: '#e3bc08',
-    secondary: '#FDF1BA'
-  },
-
-  green: {
-    primary: '#008000',
     secondary: '#FDF1BA'
   }
 
@@ -39,8 +35,7 @@ const colors: any = {
 
 export class NormalComponent implements OnInit {
 
-  // @ViewChild('modalContent') modalContent: TemplateRef<any>;
-  // @ViewChild('modalAlert') modalAlert: TemplateRef<any>;
+  @ViewChild('modalContent') modalContent: TemplateRef<any>;
 
   view: string = CalendarView.Month;
   CalendarView = CalendarView;
@@ -51,7 +46,7 @@ export class NormalComponent implements OnInit {
     event: CalendarEvent;
   };
 
-  //refresh: Subject<any> = new Subject();
+  refresh: Subject<any> = new Subject();
 
   activeDayIsOpen: boolean = true;
 
@@ -73,7 +68,8 @@ export class NormalComponent implements OnInit {
     public router: Router,
     private toastr: ToastrService,
     private socketService: SocketService,
-    private meetingService:MeetingService
+    private meetingService: MeetingService,
+    private modal:NgbModal
   ) { }
 
   ngOnInit(): void {
@@ -93,20 +89,13 @@ export class NormalComponent implements OnInit {
       this.getUserAllMeetingFunction();
     }
     else {
-      // this.verifyUserConfirmation()
-      // this.authErrorFunction();
-      // this.getUserAllMeetingFunction();
-      // this.getUpdatesFromAdmin();
+      // for admin
     }
 
-    setInterval(() => {
-      //this.meetingReminder();// function to send the reminder to the user
-    }, 5000);//will check for every two minutes
   }
 
   //function to check whether user is authorized to be on this component
-  public checkStatus = (): any =>
-  {
+  public checkStatus = (): any => {
     //using if condition to check if authToken is valid or not
     if (this.authToken === null || this.authToken === '' || this.authToken === undefined || this.authToken !== this.cookie.get('authToken')) {
       this.router.navigate(['/']);
@@ -117,10 +106,12 @@ export class NormalComponent implements OnInit {
     }
   }
 
+  //setting view of calendar
   setView(view: CalendarView) {
     this.view = view;
   }
 
+  //to check the status of whether current day is open or not
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
   }
@@ -153,28 +144,47 @@ export class NormalComponent implements OnInit {
     );
   }
 
+  //verifying user upon login and setting self online
   verifyUserConfirmation() {
-    this.socketService.verifyUser().subscribe(()=>
-    {
+    this.socketService.verifyUser().subscribe(() => {
       this.socketService.setUser(this.authToken);
     })
   }
-  getUserAllMeetingFunction(){
-    this.meetingService.getUserAllMeeting(this.receiverUserId,this.authToken).subscribe(
-    (apiResponse)=>
-    {
-      if(apiResponse.status === 404)
-      {
-        this.toastr.info(apiResponse.message);
-      }
-      else if(apiResponse.status === 200)
-      {
-        console.log(apiResponse.data);
-      }
-    }),(err)=>
-    {
+  getUserAllMeetingFunction() {
+    this.meetingService.getUserAllMeeting(this.receiverUserId, this.authToken).subscribe(
+      (apiResponse) => {
+        if (apiResponse.status === 404) {
+          this.toastr.info(apiResponse.message);
+        }
+        else if (apiResponse.status === 200) {
+          console.log(apiResponse.data);
 
-    };
+          //assigning all meetings of user to calendar events
+          this.events = apiResponse.data;
+          this.refresh.next()
+        }
+      }), (err) => {
+        this.toastr.error('Error On Getting Your Events');
+      };
+  }
+
+  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    if (isSameMonth(date, this.viewDate)) {
+      if (
+        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
+        events.length === 0
+      ) {
+        this.activeDayIsOpen = false;
+      } else {
+        this.activeDayIsOpen = true;
+      }
+      this.viewDate = date;
+    }
+  }
+
+  handleEvent(action: string, event: CalendarEvent): void {
+    this.modalData = { event, action };
+    this.modal.open(this.modalContent, { size: 'lg' });
   }
 
 }

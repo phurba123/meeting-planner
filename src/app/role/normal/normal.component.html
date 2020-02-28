@@ -81,7 +81,8 @@
             <!--switching the view of calendar-->
             <div [ngSwitch]='view'>
                 <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate"
-                    [activeDayIsOpen]="activeDayIsOpen">
+                    [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)" [events]="events"
+                    [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)">
                 </mwl-calendar-month-view>
 
                 <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate">
@@ -98,3 +99,61 @@
     </div>
 </div>
 <!-- end of container-fluid -->
+
+<!-- angular template for showing meeting detail in modal -->
+<ng-template #modalContent let-close="close">
+    <!-- modal header -->
+    <div class="modal-header">
+        <h5 class="modal-title">Meeting-Detail</h5>
+        <button type="button" class="close" (click)="close()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <!-- modal header end -->
+
+    <!-- modal body start -->
+    <div class="modal-body">
+
+        <div>
+            <div>Organiser:</div>
+            <h3>{{ modalData?.event.hostName }}</h3>
+        </div>
+
+        <div>
+            <div>Event-Topic:</div>
+            <h3>{{ modalData?.event.topic }}</h3>
+        </div>
+
+        <div>
+            <div>Description:</div>
+            <h3>{{ modalData?.event.topic }}</h3>
+        </div>
+
+        <div>
+            <div>Participant:</div>
+            <h3>{{ modalData?.event.participantName }}</h3>
+        </div>
+
+        <div>
+            <div>Date:</div>
+            <h3>{{ modalData?.event.startDate | date }} - {{modalData?.event.endDate}}</h3>
+        </div>
+
+        <div>
+            <div>Location:</div>
+            <h3>{{ modalData?.event.meetingPlace }}</h3>
+        </div>
+
+
+    </div>
+    <!-- modal body end -->
+
+    <!-- modal footer -->
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="close()">
+            OK
+        </button>
+    </div>
+    <!-- end of modal footer -->
+</ng-template>
+<!-- end of angular template -->

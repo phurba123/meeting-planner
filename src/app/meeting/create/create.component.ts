@@ -3,8 +3,8 @@ import { UserService } from '../../user.service'
 import { CookieService } from 'ngx-cookie-service';
 import { Location } from '@angular/common'
 import { MeetingService } from 'src/app/meeting.service';
-import {ToastrService} from 'ngx-toastr';
-import {Router} from '@angular/router'
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'app-create',
@@ -13,6 +13,7 @@ import {Router} from '@angular/router'
   providers: [Location]
 })
 export class CreateComponent implements OnInit {
+
   private authToken;
   private receiverUserName;
   private receiverUserId;
@@ -30,32 +31,40 @@ export class CreateComponent implements OnInit {
     private userService: UserService,
     private cookie: CookieService,
     public location: Location,
-    private meetingService:MeetingService,
-    private toastr:ToastrService,
-    private router:Router
+    private meetingService: MeetingService,
+    private toastr: ToastrService,
+    private router: Router
   ) { }
 
 
   ngOnInit(): void {
-    this.authToken = this.cookie.get('authToken');
-    this.receiverUserName = this.cookie.get('receiverUserName');
-    this.receiverUserId=this.cookie.get('receiverUserId');
-    console.log('receiverUserName', this.receiverUserName);
 
-    setTimeout(() => {
-      this.getAllUsers()
-    }, 100)
+    // let cookieObj= this.userService.getCookieData();
+
+    // this.receiverUserId=cookieObj.receiverUserId;
+    // this.receiverUserName=cookieObj.receiverUserName;
+    // this.authToken=cookieObj.authToken
+
+    this.getAllUsers();
   }
 
   //getting all the users
   public getAllUsers() {
-    this.userService.getAllUsers(this.authToken).subscribe(
+    this.userService.getAllUsers(this.userService.getCookieData().authToken).subscribe(
       (apiResponse) => {
-        this.allUsers = apiResponse.data;
-        console.log('all users', this.allUsers)
+        if (apiResponse.status === 200) {
+          console.log(apiResponse)
+          this.allUsers = apiResponse.data;
+          console.log('all users', this.allUsers)
+        }
+        else {
+          this.toastr.error(apiResponse.message)
+          console.log(apiResponse)
+        }
+
       },
       (error) => {
-        console.log('error while getting all users')
+        //this.toastr.error(error.message)
       });
   }
 
@@ -63,42 +72,51 @@ export class CreateComponent implements OnInit {
   public createMeeting() {
     // console.log(this.topic);
     //console.log(this.selectedUserDetail)
-
-    let meetingObj =
-    {
-      topic: this.topic,
-      hostId: this.receiverUserId,
-      hostName: this.receiverUserName,
-      participantId: this.selectedUserDetail.userId,
-      participantName: this.selectedUserDetail.userName,
-      participantEmail: this.selectedUserDetail.email,
-      meetingStartDate: this.startDate,
-      meetingEndDate: this.endDate,
-      meetingDescription: this.description,
-      meetingPlace: this.meetingPlace
-
+    if (!this.topic) {
+      this.toastr.warning('Enter Meeting Topic')
     }
-
-    this.meetingService.addNewMeeting(meetingObj).subscribe(
-      (apiResponse)=>
+    else if (!this.selectedUserDetail) {
+      this.toastr.warning('Enter Participant')
+    }
+    else if (!this.description) {
+      this.toastr.warning('Enter Meeting Description')
+    }
+    else if (!this.meetingPlace) {
+      this.toastr.warning('Enter Place of Meeting')
+    }
+    else {
+      let meetingObj =
       {
-        if(apiResponse['status']===200)
-        {
-          this.toastr.success('Meeting Created','Success');
+        topic: this.topic,
+        hostId: this.receiverUserId,
+        hostName: this.receiverUserName,
+        participantId: this.selectedUserDetail.userId,
+        participantName: this.selectedUserDetail.userName,
+        participantEmail: this.selectedUserDetail.email,
+        meetingStartDate: this.startDate,
+        meetingEndDate: this.endDate,
+        meetingDescription: this.description,
+        meetingPlace: this.meetingPlace
 
-          setTimeout(()=>
-          {
-            this.router.navigate(['role/admin'])
-          },1000)
-        }
-      },
-      (err)=>
-      {
-        this.toastr.error(err,'Creation failed');
       }
-    )
-    //console.log(meetingObj)
-  }
+
+      this.meetingService.addNewMeeting(meetingObj).subscribe(
+        (apiResponse) => {
+          if (apiResponse['status'] === 200) {
+            this.toastr.success('Meeting Created', 'Success');
+
+            setTimeout(() => {
+              this.router.navigate(['role/admin'])
+            }, 1000)
+          }
+        },
+        (err) => {
+          this.toastr.error(err, 'Creation failed');
+        }
+      )
+      //console.log(meetingObj)
+    }
+  }//end of create meeting
 
   //go back
   public goBack() {

@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
             //console.log(this.userService.isAdmin(userName))
 
             if (this.userService.isAdmin(userName)) {
-              this.router.navigate(['/role/admin']);
+              this.router.navigate(['role/admin']);
             }
             else {
               this.router.navigate(['role/user'])
