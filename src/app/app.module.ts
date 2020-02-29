@@ -42,7 +42,7 @@ import { SocketService } from './socket.service';
     }),
     AppRoutingModule,
   ],
-  providers: [UserService,CookieService,MeetingService,SocketService],
+  providers: [UserService,MeetingService,SocketService,CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

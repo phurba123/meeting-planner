@@ -1,15 +1,13 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {CookieService} from 'ngx-cookie-service'
-
+import { CookieService } from 'ngx-cookie-service'
 @Injectable({
   providedIn: 'root'
 })
 export class UserService implements OnInit {
 
-  ngOnInit()
-  {
+  ngOnInit() {
     console.log('userservice oninit is called')
   }
   private backendUrl = 'http://localHost:3000/api/v1/user';
@@ -17,9 +15,9 @@ export class UserService implements OnInit {
   private authToken;
 
   constructor(private http: HttpClient,
-    private cookie:CookieService) { 
-      console.log('user service constructor called')
-    }
+    private cookie: CookieService) {
+    console.log('user service constructor called')
+  }
   //end of constructor
 
   //for signup
@@ -46,10 +44,13 @@ export class UserService implements OnInit {
   }//end of login
 
   //for logout
-  public logOut(authToken) {
-    let params = new HttpParams()
-      .set('authToken', authToken)
-    return this.http.post(`${this.backendUrl}/logout`, params);
+  public logOut(userId) {
+     const params = new HttpParams()
+       .set('userId', userId)
+    
+    let data={};
+    console.log('inside logout')
+    return this.http.post(`${this.backendUrl}/logout`,params);
   }
 
   //setting userInfo on local storage
@@ -68,7 +69,7 @@ export class UserService implements OnInit {
   }
 
   //check if user is admin or not
-  public isAdmin(userName):boolean {
+  public isAdmin(userName): boolean {
     let name = userName;
     //to check if userName ends with admin or not
     let indexToSlice = (name.length - 5);//for getting substring with last 5 character
@@ -84,17 +85,17 @@ export class UserService implements OnInit {
   }
 
   //getting all the users
-  public getAllUsers(authToken):Observable<any>{
+  public getAllUsers(authToken: string): Observable<any> {
     return this.http.get(`${this.backendUrl}/view/all?authToken=${authToken}`);
   }
 
   //getting cookies
-  public getCookieData()
-  {
+  public getCookieData() {
+    console.log('authToken', this.cookie.get('authToken'));
     let cookieObj = {
-      'authToken':this.cookie.get('authToken'),
-      'receiverUserId':this.cookie.get('receiverUserId'),
-      'receiverUserName':this.cookie.get('receiverUserName')
+      'authToken': this.cookie.get('authToken'),
+      'receiverUserId': this.cookie.get('receiverUserId'),
+      'receiverUserName': this.cookie.get('receiverUserName')
     }
     console.log(cookieObj);
     return cookieObj;

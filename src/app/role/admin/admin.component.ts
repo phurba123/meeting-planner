@@ -1,10 +1,11 @@
 import { Component, OnInit,ViewChild,ElementRef, OnDestroy } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service'
+//import { CookieService } from 'ngx-cookie-service'
 import { CalendarEvent, CalendarView } from 'angular-calendar';
 import { Subject } from 'rxjs'
 import { UserService } from 'src/app/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import {CookieService} from 'ngx-cookie-service'
 
 @Component({
   selector: 'app-admin',
@@ -16,10 +17,8 @@ export class AdminComponent implements OnInit ,OnDestroy{
   ngOnDestroy(): void {
     console.log('inside on Destroy');
   }
-  //  @ViewChild('scrollDiv', { read: ElementRef})
-  //  public scrollDiv: ElementRef;
 
-  private authToken;
+  public authToken;
   public receiverUserId;
   public receiverUserName;
   public allUsers:any
@@ -31,10 +30,10 @@ export class AdminComponent implements OnInit ,OnDestroy{
   viewDate: Date = new Date();
 
   constructor(
-    private cookie: CookieService,
     private userService: UserService,
     private toastr: ToastrService,
-    private router: Router
+    private router: Router,
+    private cookie:CookieService
   ) { }
 
   ngOnInit(): void {
@@ -64,7 +63,7 @@ export class AdminComponent implements OnInit ,OnDestroy{
       {
         console.log('error while getting all users')
       });
-  }
+  }//end of getting all the users
 
   setView(view: CalendarView) {
     this.view = view;
@@ -76,7 +75,7 @@ export class AdminComponent implements OnInit ,OnDestroy{
 
   //logout function
   public logOut() {
-    this.userService.logOut(this.authToken).subscribe(
+    this.userService.logOut(this.receiverUserId).subscribe(
       (apiResponse) => {
         if (apiResponse['status'] === 200) {
           this.toastr.success('You are logged out', 'LogOut successfull');
@@ -88,10 +87,11 @@ export class AdminComponent implements OnInit ,OnDestroy{
         }
         else{
           this.toastr.error(apiResponse['message'],'LogOut failed')
+          console.log(apiResponse)
         }
       },
       (error) => {
-        this.deleteCookiesAndLocalStorage()
+        console.log('error is : ',error)
       }
     );
   }
@@ -100,9 +100,9 @@ export class AdminComponent implements OnInit ,OnDestroy{
   {
     //deleting local storage and cookies upon logout
     this.userService.removeUserInfoFromLocalStorage();
-    this.cookie.delete('authToken','/')
-    this.cookie.delete('receiverUserId','/');
-    this.cookie.delete('receiverUserName','/');
+    this.cookie.delete('authToken')
+    this.cookie.delete('receiverUserId');
+    this.cookie.delete('receiverUserName');
   }
 
   

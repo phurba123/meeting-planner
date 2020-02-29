@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/user.service';
-import { CookieService } from 'ngx-cookie-service';
 import {Location} from '@angular/common';
 
 @Component({
@@ -19,12 +18,11 @@ export class UpdateComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private cookie: CookieService,
     private location:Location) { }
 
   ngOnInit(): void {
-    this.authToken = this.cookie.get('authToken');
-    this.getAllUsers()
+    // this.authToken = this.cookie.get('authToken');
+    // this.getAllUsers()
   }
 
   //getting all the users

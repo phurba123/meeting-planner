@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../user.service'
-import { CookieService } from 'ngx-cookie-service';
+// import {Cookie} from 'ng2-cookies'
+import {CookieService} from 'ngx-cookie-service'
 import { Location } from '@angular/common'
 import { MeetingService } from 'src/app/meeting.service';
 import { ToastrService } from 'ngx-toastr';
@@ -29,28 +30,29 @@ export class CreateComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private cookie: CookieService,
     public location: Location,
     private meetingService: MeetingService,
     private toastr: ToastrService,
-    private router: Router
+    private router: Router,
+    private cookie:CookieService
   ) { }
 
 
   ngOnInit(): void {
+    console.log('onInit create')
 
     // let cookieObj= this.userService.getCookieData();
 
-    // this.receiverUserId=cookieObj.receiverUserId;
-    // this.receiverUserName=cookieObj.receiverUserName;
-    // this.authToken=cookieObj.authToken
+    this.receiverUserId=this.cookie.get('receiverUserId')
+    this.receiverUserName=this.cookie.get('receiverUserName')
+    this.authToken=this.cookie.get('authToken')
 
     this.getAllUsers();
   }
 
   //getting all the users
   public getAllUsers() {
-    this.userService.getAllUsers(this.userService.getCookieData().authToken).subscribe(
+    this.userService.getAllUsers(this.authToken).subscribe(
       (apiResponse) => {
         if (apiResponse.status === 200) {
           console.log(apiResponse)
@@ -103,6 +105,7 @@ export class CreateComponent implements OnInit {
       this.meetingService.addNewMeeting(meetingObj).subscribe(
         (apiResponse) => {
           if (apiResponse['status'] === 200) {
+            console.log('success creatinog')
             this.toastr.success('Meeting Created', 'Success');
 
             setTimeout(() => {

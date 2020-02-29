@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
     private toast: ToastrService,
     private userService: UserService,
     private router: Router,
-    private cookie: CookieService
+    private cookie:CookieService
   ) { }
 
   ngOnInit() {
@@ -78,7 +78,7 @@ export class LoginComponent implements OnInit {
 
   //login using enterkey event
   public loginUsingKeyPress(event: any) {
-    if (event.keyCode == 13) {
+    if (event.keyCode === 13) {
       this.logIn();
     }
   }

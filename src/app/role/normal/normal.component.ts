@@ -63,8 +63,8 @@ export class NormalComponent implements OnInit {
     //private modal: NgbModal,
     public userService: UserService,
     //public socketService: SocketService,
-    private cookie: CookieService,
     public _route: ActivatedRoute,
+    public cookie:CookieService,
     public router: Router,
     private toastr: ToastrService,
     private socketService: SocketService,
@@ -118,7 +118,6 @@ export class NormalComponent implements OnInit {
 
   //logout function
   public logOut() {
-    console.log('inside logout')
     this.userService.logOut(this.authToken).subscribe(
       (apiResponse) => {
         if (apiResponse['status'] === 200) {
