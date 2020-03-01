@@ -82,13 +82,18 @@
             <div [ngSwitch]='view'>
                 <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate"
                     [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)" [events]="events"
-                    [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)">
+                    [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)" 
+                    (eventTimesChanged)="eventTimesChanged($event)">
                 </mwl-calendar-month-view>
 
-                <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate">
+                <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [events]="events"
+                [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)"
+                (eventTimesChanged)="eventTimesChanged($event)">
                 </mwl-calendar-week-view>
 
-                <mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" [viewDate]="viewDate">
+                <mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" [viewDate]="viewDate" [events]="events"
+                [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)"
+                (eventTimesChanged)="eventTimesChanged($event)">
                 </mwl-calendar-day-view>
             </div>
             <!-- switching the view of calendar end -->
@@ -126,7 +131,7 @@
 
         <div>
             <div>Description:</div>
-            <h3>{{ modalData?.event.topic }}</h3>
+            <h3>{{ modalData?.event.description }}</h3>
         </div>
 
         <div>
@@ -136,7 +141,7 @@
 
         <div>
             <div>Date:</div>
-            <h3>{{ modalData?.event.startDate | date }} - {{modalData?.event.endDate}}</h3>
+            <h3>{{ modalData?.event.start | date }} - {{modalData?.event.end | date}}</h3>
         </div>
 
         <div>

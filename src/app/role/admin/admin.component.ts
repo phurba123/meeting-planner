@@ -1,18 +1,46 @@
-import { Component, OnInit,ViewChild,ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, TemplateRef } from '@angular/core';
 //import { CookieService } from 'ngx-cookie-service'
-import { CalendarEvent, CalendarView } from 'angular-calendar';
-import { Subject } from 'rxjs'
+import { CalendarEvent, CalendarView, CalendarEventTimesChangedEvent } from 'angular-calendar';
 import { UserService } from 'src/app/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import {CookieService} from 'ngx-cookie-service'
+import { CookieService } from 'ngx-cookie-service'
+import { MeetingService } from 'src/app/meeting.service';
+import { Subject } from 'rxjs'
+import { isSameMonth, isSameDay } from 'date-fns'
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap'
+
+const colors: any = {
+
+  red: {
+    primary: '#ad2121',
+    secondary: '#FAE3E3'
+  }
+  ,
+
+  blue: {
+    primary: '#1e90ff',
+    secondary: '#D1E8FF'
+  }
+  ,
+
+  yellow: {
+    primary: '#e3bc08',
+    secondary: '#FDF1BA'
+  }
+
+
+};
 
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.css']
 })
-export class AdminComponent implements OnInit ,OnDestroy{
+
+export class AdminComponent implements OnInit, OnDestroy {
+
+  @ViewChild('modalContent') modalContent: TemplateRef<any>;
 
   ngOnDestroy(): void {
     console.log('inside on Destroy');
@@ -21,49 +49,67 @@ export class AdminComponent implements OnInit ,OnDestroy{
   public authToken;
   public receiverUserId;
   public receiverUserName;
-  public allUsers:any
+  public allUsers: any
 
   public activeDayIsOpen: boolean = true;
+
+  refresh: Subject<any> = new Subject();
+
+  modalData: {
+    action: string;
+    event: CalendarEvent;
+  };
 
   view: string = CalendarView.Month;
   CalendarView = CalendarView;
   viewDate: Date = new Date();
 
+  public meetings: any = [];
+  public events: CalendarEvent[] = [];
+
   constructor(
     private userService: UserService,
     private toastr: ToastrService,
     private router: Router,
-    private cookie:CookieService
+    private cookie: CookieService,
+    private meetingService: MeetingService,
+    private modal:NgbModal
   ) { }
 
   ngOnInit(): void {
     console.log('inside on init')
-    let cookieObj= this.userService.getCookieData();
+    let cookieObj = this.userService.getCookieData();
 
-    this.receiverUserId=cookieObj.receiverUserId;
-    this.receiverUserName=cookieObj.receiverUserName;
-    this.authToken=cookieObj.authToken
+    this.receiverUserId = cookieObj.receiverUserId;
+    this.receiverUserName = cookieObj.receiverUserName;
+    this.authToken = cookieObj.authToken
 
     this.getAllUsers()
-    
+
 
 
   }
 
   //getting all the users
-  public getAllUsers(){
+  public getAllUsers() {
     this.userService.getAllUsers(this.authToken).subscribe(
-      (apiResponse)=>
-      {
+      (apiResponse) => {
         console.log(apiResponse)
         this.allUsers = apiResponse.data;
-        console.log('all users',this.allUsers)
+        console.log('all users', this.allUsers)
       },
-      (error)=>
-      {
+      (error) => {
         console.log('error while getting all users')
       });
   }//end of getting all the users
+
+  //getting selected user meetings
+  public getSelectedUserMeeting(userId) {
+    this.receiverUserId = userId;
+    console.log('getting selected user meeting')
+    this.getUserAllMeetingFunction()
+
+  }
 
   setView(view: CalendarView) {
     this.view = view;
@@ -71,6 +117,39 @@ export class AdminComponent implements OnInit ,OnDestroy{
 
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
+  }
+
+  getUserAllMeetingFunction() {
+    this.events = [];
+    this.meetingService.getUserAllMeeting(this.receiverUserId, this.authToken).subscribe(
+      (apiResponse) => {
+        if (apiResponse.status === 200) {
+          // console.log(apiResponse.data);
+
+          let allMeetings = apiResponse.data;
+          console.log('allMeetings before', allMeetings)
+
+          //assigning all meetings of user to calendar events
+          for (let meetingEvent of allMeetings) {
+            meetingEvent.title = meetingEvent.topic;
+            meetingEvent.start = new Date(meetingEvent.meetingStartDate);
+            meetingEvent.end = new Date(meetingEvent.meetingEndDate);
+            meetingEvent.color = colors.red;
+            meetingEvent.remindMe = true
+
+          }
+          console.log('allMeetings after', allMeetings)
+          this.events = allMeetings;
+          this.refresh.next()
+        }
+        else {
+          this.toastr.error(apiResponse.message);
+          this.events = [];
+        }
+      }), (err) => {
+        this.toastr.error('Error On Getting Your Events');
+        this.events = [];
+      };
   }
 
   //logout function
@@ -85,19 +164,44 @@ export class AdminComponent implements OnInit ,OnDestroy{
 
           this.deleteCookiesAndLocalStorage();
         }
-        else{
-          this.toastr.error(apiResponse['message'],'LogOut failed')
+        else {
+          this.toastr.error(apiResponse['message'], 'LogOut failed')
           console.log(apiResponse)
         }
       },
       (error) => {
-        console.log('error is : ',error)
+        console.log('error is : ', error)
       }
     );
   }
 
-  private deleteCookiesAndLocalStorage()
-  {
+  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    if (isSameMonth(date, this.viewDate)) {
+      if (
+        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
+        events.length === 0
+      ) {
+        this.activeDayIsOpen = false;
+      } else {
+        this.activeDayIsOpen = true;
+      }
+      this.viewDate = date;
+    }
+  }
+
+  eventTimesChanged({ event, newStart, newEnd }: CalendarEventTimesChangedEvent): void {
+    event.start = newStart;
+    event.end = newEnd;
+    this.handleEvent('Dropped or resized', event);
+    this.refresh.next();
+  }
+
+  handleEvent(action: string, event: CalendarEvent): void {
+    this.modalData = { event, action };
+    this.modal.open(this.modalContent, { size: 'lg' });
+  }
+
+  private deleteCookiesAndLocalStorage() {
     //deleting local storage and cookies upon logout
     this.userService.removeUserInfoFromLocalStorage();
     this.cookie.delete('authToken')
@@ -105,6 +209,6 @@ export class AdminComponent implements OnInit ,OnDestroy{
     this.cookie.delete('receiverUserName');
   }
 
-  
+
 
 }

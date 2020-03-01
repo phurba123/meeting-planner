@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service'
-import { CalendarEvent, CalendarView } from 'angular-calendar';
+import { CalendarEvent, CalendarView, CalendarEventTimesChangedEvent } from 'angular-calendar';
 import { isSameMonth, isSameDay } from 'date-fns'
 import { Subject } from 'rxjs'
 import { UserService } from 'src/app/user.service';
@@ -11,18 +11,24 @@ import { MeetingService } from 'src/app/meeting.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 const colors: any = {
+
   red: {
     primary: '#ad2121',
     secondary: '#FAE3E3'
-  },
+  }
+  ,
+
   blue: {
     primary: '#1e90ff',
     secondary: '#D1E8FF'
-  },
+  }
+  ,
+
   yellow: {
     primary: '#e3bc08',
     secondary: '#FDF1BA'
   }
+
 
 };
 
@@ -64,12 +70,12 @@ export class NormalComponent implements OnInit {
     public userService: UserService,
     //public socketService: SocketService,
     public _route: ActivatedRoute,
-    public cookie:CookieService,
+    public cookie: CookieService,
     public router: Router,
     private toastr: ToastrService,
     private socketService: SocketService,
     private meetingService: MeetingService,
-    private modal:NgbModal
+    private modal: NgbModal
   ) { }
 
   ngOnInit(): void {
@@ -118,7 +124,7 @@ export class NormalComponent implements OnInit {
 
   //logout function
   public logOut() {
-    this.userService.logOut(this.authToken).subscribe(
+    this.userService.logOut(this.receiverUserId).subscribe(
       (apiResponse) => {
         if (apiResponse['status'] === 200) {
           this.toastr.success('You are logged out', 'LogOut successfull');
@@ -152,15 +158,28 @@ export class NormalComponent implements OnInit {
   getUserAllMeetingFunction() {
     this.meetingService.getUserAllMeeting(this.receiverUserId, this.authToken).subscribe(
       (apiResponse) => {
-        if (apiResponse.status === 404) {
-          this.toastr.info(apiResponse.message);
-        }
-        else if (apiResponse.status === 200) {
-          console.log(apiResponse.data);
+        if (apiResponse.status === 200) {
+          // console.log(apiResponse.data);
+
+          let allMeetings = apiResponse.data;
+          console.log('allMeetings before',allMeetings)
 
           //assigning all meetings of user to calendar events
-          this.events = apiResponse.data;
+          for (let meetingEvent of allMeetings) {
+            meetingEvent.title = meetingEvent.topic;
+            meetingEvent.start = new Date(meetingEvent.meetingStartDate);
+            meetingEvent.end = new Date(meetingEvent.meetingEndDate);
+            meetingEvent.color = colors.red;
+            meetingEvent.remindMe = true
+
+          }
+          console.log('allMeetings after',allMeetings)
+          this.events = allMeetings;
           this.refresh.next()
+        }
+        else{
+          this.toastr.error(apiResponse.message);
+          this.events=[];
         }
       }), (err) => {
         this.toastr.error('Error On Getting Your Events');
@@ -181,9 +200,16 @@ export class NormalComponent implements OnInit {
     }
   }
 
+  eventTimesChanged({ event, newStart, newEnd }: CalendarEventTimesChangedEvent): void {
+    event.start = newStart;
+    event.end = newEnd;
+    this.handleEvent('Dropped or resized', event);
+    this.refresh.next();
+  }
+
   handleEvent(action: string, event: CalendarEvent): void {
     this.modalData = { event, action };
-    this.modal.open(this.modalContent, { size: 'lg' });
+    this.modal.open(this.modalContent, { size: 'lg'});
   }
 
 }

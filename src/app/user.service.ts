@@ -1,5 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service'
 @Injectable({
@@ -45,12 +45,12 @@ export class UserService implements OnInit {
 
   //for logout
   public logOut(userId) {
-     const params = new HttpParams()
-       .set('userId', userId)
-    
-    let data={};
+    const params = new HttpParams()
+      .set('userId', userId)
+
+    let data = {};
     console.log('inside logout')
-    return this.http.post(`${this.backendUrl}/logout`,params);
+    return this.http.post(`${this.backendUrl}/logout`, params);
   }
 
   //setting userInfo on local storage
@@ -65,7 +65,7 @@ export class UserService implements OnInit {
 
   //getting userInfo from local storage
   public getUserInfoFromLocalStorage() {
-    return localStorage.getItem('userInfo')
+    return JSON.parse(localStorage.getItem('userInfo'));
   }
 
   //check if user is admin or not
@@ -100,5 +100,27 @@ export class UserService implements OnInit {
     console.log(cookieObj);
     return cookieObj;
   }//end of getting cookies
+
+
+
+  private handleError(err: HttpErrorResponse) {
+
+    let errorMessage = '';
+
+    if (err.error instanceof Error) {
+
+      errorMessage = `An error occurred: ${err.error.message}`;
+
+    } else {
+
+      errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`;
+
+    } // end condition *if
+
+    console.error(errorMessage);
+
+    return Observable.throw(errorMessage);
+
+  }  // END handleError
 
 }

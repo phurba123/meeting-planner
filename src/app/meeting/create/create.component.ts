@@ -42,12 +42,20 @@ export class CreateComponent implements OnInit {
     console.log('onInit create')
 
     // let cookieObj= this.userService.getCookieData();
+    let userDetail = this.userService.getUserInfoFromLocalStorage();
 
-    this.receiverUserId=this.cookie.get('receiverUserId')
-    this.receiverUserName=this.cookie.get('receiverUserName')
+    this.receiverUserId=userDetail.userId
+    this.receiverUserName=userDetail.userName;
     this.authToken=this.cookie.get('authToken')
+    if(this.userService.isAdmin(this.receiverUserName))
+    {
+      this.getAllUsers();
+    }
+    else{
+      this.router.navigate(['/'])
+    }
 
-    this.getAllUsers();
+    
   }
 
   //getting all the users
