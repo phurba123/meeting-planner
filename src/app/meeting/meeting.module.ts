@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { CreateComponent } from './create/create.component';
 import { UpdateComponent } from './update/update.component';
 import {RouterModule} from '@angular/router';
-import {FormsModule} from '@angular/forms'
+import {FormsModule} from '@angular/forms';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';//date/time picker
 
 
 
@@ -12,7 +13,9 @@ import {FormsModule} from '@angular/forms'
   imports: [
     CommonModule,
     RouterModule,
-    FormsModule
+    FormsModule,
+    OwlDateTimeModule, 
+    OwlNativeDateTimeModule
   ]
 })
 export class MeetingModule { }

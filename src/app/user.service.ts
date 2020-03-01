@@ -1,7 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CookieService } from 'ngx-cookie-service'
 @Injectable({
   providedIn: 'root'
 })
@@ -14,8 +13,7 @@ export class UserService implements OnInit {
 
   private authToken;
 
-  constructor(private http: HttpClient,
-    private cookie: CookieService) {
+  constructor(private http: HttpClient) {
     console.log('user service constructor called')
   }
   //end of constructor
@@ -88,18 +86,6 @@ export class UserService implements OnInit {
   public getAllUsers(authToken: string): Observable<any> {
     return this.http.get(`${this.backendUrl}/view/all?authToken=${authToken}`);
   }
-
-  //getting cookies
-  public getCookieData() {
-    console.log('authToken', this.cookie.get('authToken'));
-    let cookieObj = {
-      'authToken': this.cookie.get('authToken'),
-      'receiverUserId': this.cookie.get('receiverUserId'),
-      'receiverUserName': this.cookie.get('receiverUserName')
-    }
-    console.log(cookieObj);
-    return cookieObj;
-  }//end of getting cookies
 
 
 

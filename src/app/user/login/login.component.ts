@@ -51,8 +51,8 @@ export class LoginComponent implements OnInit {
 
             //setting cookie
             this.cookie.set('authToken', data.data.authToken);
-            this.cookie.set('receiverUserName', userName)
-            this.cookie.set('receiverUserId', data.data.userDetails.userId);
+            // this.cookie.set('receiverUserName', userName)
+            // this.cookie.set('receiverUserId', data.data.userDetails.userId);
             //end of setting cookie
 
             //setting userInfo on local storage

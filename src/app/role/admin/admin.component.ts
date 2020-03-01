@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CookieService } from 'ngx-cookie-service'
 import { MeetingService } from 'src/app/meeting.service';
 import { Subject } from 'rxjs'
-import { isSameMonth, isSameDay } from 'date-fns'
+import { isSameMonth, isSameDay,addHours } from 'date-fns'
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap'
 
 const colors: any = {
@@ -50,6 +50,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   public receiverUserId;
   public receiverUserName;
   public allUsers: any
+  public userInfo;
 
   public activeDayIsOpen: boolean = true;
 
@@ -78,11 +79,10 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     console.log('inside on init')
-    let cookieObj = this.userService.getCookieData();
-
-    this.receiverUserId = cookieObj.receiverUserId;
-    this.receiverUserName = cookieObj.receiverUserName;
-    this.authToken = cookieObj.authToken
+    this.userInfo = this.userService.getUserInfoFromLocalStorage()
+    this.receiverUserId = this.userInfo.userId
+    this.receiverUserName = this.userInfo.userName;
+    this.authToken = this.cookie.get('authToken');
 
     this.getAllUsers()
 
@@ -125,6 +125,7 @@ export class AdminComponent implements OnInit, OnDestroy {
       (apiResponse) => {
         if (apiResponse.status === 200) {
           // console.log(apiResponse.data);
+          this.toastr.info('Meeting Found')
 
           let allMeetings = apiResponse.data;
           console.log('allMeetings before', allMeetings)
@@ -138,7 +139,7 @@ export class AdminComponent implements OnInit, OnDestroy {
             meetingEvent.remindMe = true
 
           }
-          console.log('allMeetings after', allMeetings)
+          //console.log('allMeetings after', allMeetings)
           this.events = allMeetings;
           this.refresh.next()
         }
@@ -205,8 +206,6 @@ export class AdminComponent implements OnInit, OnDestroy {
     //deleting local storage and cookies upon logout
     this.userService.removeUserInfoFromLocalStorage();
     this.cookie.delete('authToken')
-    this.cookie.delete('receiverUserId');
-    this.cookie.delete('receiverUserName');
   }
 
 

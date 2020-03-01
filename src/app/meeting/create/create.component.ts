@@ -19,6 +19,8 @@ export class CreateComponent implements OnInit {
   private receiverUserName;
   private receiverUserId;
 
+  public isUserSelected:boolean=false;
+
   public selectedUserName;//userName should be unique
   public selectedUserDetail;
   public startDate: Date;
@@ -103,12 +105,13 @@ export class CreateComponent implements OnInit {
         participantId: this.selectedUserDetail.userId,
         participantName: this.selectedUserDetail.userName,
         participantEmail: this.selectedUserDetail.email,
-        meetingStartDate: this.startDate,
-        meetingEndDate: this.endDate,
+        meetingStartDate: this.startDate.getTime(),
+        meetingEndDate: this.endDate.getTime(),
         meetingDescription: this.description,
         meetingPlace: this.meetingPlace
 
       }
+      console.log(meetingObj)
 
       this.meetingService.addNewMeeting(meetingObj).subscribe(
         (apiResponse) => {
@@ -128,6 +131,14 @@ export class CreateComponent implements OnInit {
       //console.log(meetingObj)
     }
   }//end of create meeting
+
+  public selectFromDropdown(user)
+  {
+    this.selectedUserDetail = user
+    this.selectedUserName = user.userName
+    console.log(this.selectedUserName)
+    this.isUserSelected = true;
+  }
 
   //go back
   public goBack() {

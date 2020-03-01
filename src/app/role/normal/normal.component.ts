@@ -82,11 +82,11 @@ export class NormalComponent implements OnInit {
 
 
     this.authToken = this.cookie.get('authToken');
-    this.receiverUserId = this.cookie.get('receiverUserId');
-    this.receiverUserName = this.cookie.get('receiverUserName');
     this.remindMe = true
 
     this.userInfo = this.userService.getUserInfoFromLocalStorage()
+    this.receiverUserId = this.userInfo.userId
+    this.receiverUserName = this.userInfo.userName;
 
     this.checkStatus();
 
@@ -135,8 +135,6 @@ export class NormalComponent implements OnInit {
           //deleting local storage and cookies upon logout
           this.userService.removeUserInfoFromLocalStorage();
           this.cookie.delete('authToken');
-          this.cookie.delete('receiverUserId');
-          this.cookie.delete('receiverUserName');
         }
         else {
           this.toastr.error(apiResponse['message'], 'LogOut fail');

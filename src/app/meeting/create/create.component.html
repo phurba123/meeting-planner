@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark " style="background: deepskyblue">
-    <a class="navbar-brand font-weight-bold" href="#">Meeting-Planner</a>
+    <a class="navbar-brand font-weight-bold">Meeting-Planner</a>
 </nav>
 
 <div class="container-fluid ">
@@ -7,6 +7,7 @@
 
         <div class="col-3">
             <!-- empty col -->
+
         </div>
 
         <div class="col-md-6 col-sm-12 mt-2">
@@ -35,17 +36,21 @@
                         </div>
 
                         <div class="form-group" *ngIf="allUsers">
-                            <label class="sr-only" for="nameSelect">preference</label>
-                            <select class="custom-select" id="nameSelect" [(ngModel)]="selectedUserDetail"
-                                name="selectedUserDetail">
+                            <label class="sr-only" for="nameSelect">select user</label>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Select User
+                                </button>
+                                <div class="dropdown-menu scrollOnDropdown" aria-labelledby="dropdownMenuButton">
+                                    <option class="dropdown-item" *ngFor="let user of allUsers"
+                                        (click)="selectFromDropdown(user)">
+                                     {{user.userName}}</option>
 
-                                <option selected>Choose...</option>
-                                <option *ngFor="let user of allUsers" [ngValue]="user">
-                                    {{user.userName}}
-                                </option>
 
-                            </select>
-                            <small class="form-text text-muted">select user</small>
+                                </div>
+                            </div>
+                            <small class="form-text text-muted">{{selectedUserName}}</small>
                         </div>
 
                         <div class="form-group">
@@ -56,16 +61,26 @@
 
                         <div class="form-group">
                             <label class="sr-only" for="meetingStartDate">Start Date</label>
-                            <input type="date" class="form-control" id="meetingStartDate" [(ngModel)]="startDate"
-                                name="startDate">
+                            <input id="meetingStartDate" [owlDateTime]="date1" name="startDate" [(ngModel)]="startDate"
+                                placeholder="Start Date Time">
+
+                            <span [owlDateTimeTrigger]="date1">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                            </span>
+                            <owl-date-time #date1></owl-date-time>
 
                             <small class="form-text text-muted">Meeting start date</small>
                         </div>
 
                         <div class="form-group">
                             <label class="sr-only" for="meetingEndDate">End Date</label>
-                            <input type="date" class="form-control" id="meetingEndDate" [(ngModel)]="endDate"
-                                name="endDate">
+                            <input id="meetingEndDate" [owlDateTime]="date2" name="endDate" [(ngModel)]="endDate"
+                                placeholder="End Date Time">
+
+                            <span [owlDateTimeTrigger]="date2">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                            </span>
+                            <owl-date-time #date2></owl-date-time>
                             <small class="form-text text-muted">Meeting end date</small>
                         </div>
 

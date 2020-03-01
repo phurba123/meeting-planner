@@ -4,6 +4,11 @@
     overflow-y: scroll;
 }
 
+#userNameDisplay
+{
+    width: 20vw
+}
+
 
 @media only screen and (max-width: 768px) {
     /* For mobile phones: */
@@ -11,5 +16,10 @@
     {
         height: 40vh;
         margin-bottom: 1vh
+    }
+
+    #userNameDisplay
+    {
+        width: 80vw;
     }
   }
