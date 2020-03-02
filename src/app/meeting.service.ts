@@ -58,5 +58,11 @@ export class MeetingService {
     .set('meetingEndDate',data.meetingEndDate);
 
     return this.http.put(`${this.baseUrl}/${meetingId}/updateMeeting`,params);
+  }//end of updating meeting
+
+  public deleteMeeting(meetingId)
+  {
+    let data = {};
+    return this.http.post(`${this.baseUrl}/${meetingId}/deleteMeeting`,data);
   }
 }

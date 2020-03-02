@@ -7,8 +7,8 @@ import { ToastrService } from 'ngx-toastr';
 import { CookieService } from 'ngx-cookie-service'
 import { MeetingService } from 'src/app/meeting.service';
 import { Subject } from 'rxjs'
-import { isSameMonth, isSameDay,addHours } from 'date-fns'
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap'
+import { isSameMonth, isSameDay, addHours } from 'date-fns'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 
 const colors: any = {
 
@@ -74,11 +74,11 @@ export class AdminComponent implements OnInit, OnDestroy {
     private router: Router,
     private cookie: CookieService,
     private meetingService: MeetingService,
-    private modal:NgbModal
+    private modal: NgbModal
   ) { }
 
   ngOnInit(): void {
-    console.log('inside on init')
+    //console.log('inside on init')
     this.userInfo = this.userService.getUserInfoFromLocalStorage()
     this.receiverUserId = this.userInfo.userId
     this.receiverUserName = this.userInfo.userName;
@@ -94,19 +94,19 @@ export class AdminComponent implements OnInit, OnDestroy {
   public getAllUsers() {
     this.userService.getAllUsers(this.authToken).subscribe(
       (apiResponse) => {
-        console.log(apiResponse)
+        //console.log(apiResponse)
         this.allUsers = apiResponse.data;
-        console.log('all users', this.allUsers)
+        //console.log('all users', this.allUsers)
       },
       (error) => {
-        console.log('error while getting all users')
+        this.toastr.error(error.error.message)
       });
   }//end of getting all the users
 
   //getting selected user meetings
   public getSelectedUserMeeting(userId) {
     this.receiverUserId = userId;
-    console.log('getting selected user meeting')
+    //console.log('getting selected user meeting')
     this.getUserAllMeetingFunction()
 
   }
@@ -128,7 +128,7 @@ export class AdminComponent implements OnInit, OnDestroy {
           this.toastr.info('Meeting Found')
 
           let allMeetings = apiResponse.data;
-          console.log('allMeetings before', allMeetings)
+          //console.log('allMeetings before', allMeetings)
 
           //assigning all meetings of user to calendar events
           for (let meetingEvent of allMeetings) {
@@ -191,7 +191,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   eventTimesChanged({ event, newStart, newEnd }: CalendarEventTimesChangedEvent): void {
-    event.start = new Date( newStart);
+    event.start = new Date(newStart);
     event.end = new Date(newEnd);
     this.handleEvent('Dropped or resized', event);
     this.refresh.next();
@@ -199,15 +199,37 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   handleEvent(action: string, event: CalendarEvent): void {
     this.modalData = { event, action };
-    console.log('handle event',event)
-    this.modal.open(this.modalContent, { size: 'lg',scrollable:true });
+    console.log('handle event', event)
+    this.modal.open(this.modalContent, { size: 'lg', scrollable: true });
   }
 
-  public updateMeeting(meetingId)
-  {
+  //updating meeting
+  public updateMeeting(meetingId) {
     console.log(meetingId);
     this.router.navigate([`meeting/${meetingId}/update`]);
     this.modal.dismissAll()
+  }//end of updating meeting
+
+  //deleting meeting
+  public deleteMeeting(meetingId,eventToDelete) {
+    this.meetingService.deleteMeeting(meetingId).subscribe((apiResponse) => {
+      if (apiResponse['status'] === 200) {
+        this.toastr.success(apiResponse['message']);
+        setTimeout(() => {
+          this.dismissModal()
+        },1000);
+        this.events = this.events.filter(event => event !== eventToDelete);
+        this.refresh.next()
+      }
+      else {
+        this.toastr.info(apiResponse['message']);
+        this.dismissModal()
+      }
+    },
+      (err) => {
+        this.toastr.error(err.error.message);
+        this.dismissModal()
+      })
   }
 
   private deleteCookiesAndLocalStorage() {
@@ -216,6 +238,9 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.cookie.delete('authToken')
   }
 
-
+  //close modal
+  public dismissModal() {
+    this.modal.dismissAll()
+  }//end of close modal
 
 }
