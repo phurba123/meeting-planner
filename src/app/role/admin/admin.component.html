@@ -117,8 +117,8 @@
 <!-- angular template for showing meeting detail in modal -->
 <ng-template #modalContent let-close="close">
     <!-- modal header -->
-    <div class="modal-header">
-        <h5 class="modal-title">Meeting-Detail</h5>
+    <div class="modal-header justify-content-center bg-dark ">
+        <h5 class="modal-title text-white font-weight-bold ">Meeting-Detail</h5>
         <button type="button" class="close" (click)="close()">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -128,44 +128,58 @@
     <!-- modal body start -->
     <div class="modal-body">
 
+        <!-- setting up content of modal body -->
         <div>
-            <div>Organiser:</div>
-            <h3>{{ modalData?.event.hostName }}</h3>
-        </div>
+            <label class="modalLabel">Organiser:</label>
+            <span class="modalDescription">{{ modalData?.event.hostName }}</span>
+        </div><hr>
 
         <div>
-            <div>Event-Topic:</div>
-            <h3>{{ modalData?.event.topic }}</h3>
-        </div>
+            <cite class="modalLabel">Event-Topic:</cite>
+            <span class="modalDescription">{{ modalData?.event.topic }}</span>
+        </div><hr>
+
+        <div class="d-flex">
+            <cite class="modalLabel">Description:</cite>
+            <p class="text-justify modalDescription">{{ modalData?.event.meetingDescription }}</p>
+        </div><hr>
 
         <div>
-            <div>Description:</div>
-            <h3>{{ modalData?.event.meetingDescription }}</h3>
-        </div>
+            <cite class="modalLabel">Participant:</cite>
+            <span class="modalDescription">{{ modalData?.event.participantName }}</span>
+        </div><hr>
 
         <div>
-            <div>Participant:</div>
-            <h3>{{ modalData?.event.participantName }}</h3>
-        </div>
+            <cite class="modalLabel">Date:</cite>
+            <span class="modalDescription">{{ modalData?.event.start| date:"medium"}}
+                 - {{modalData?.event.end | date:"medium"}}</span>
+        </div><hr>
 
         <div>
-            <div>Date:</div>
-            <h3>{{ modalData?.event.start| date:"medium"}} - {{modalData?.event.end | date:"medium"}}</h3>
+            <cite class="modalLabel">Location:</cite>
+            <span class="modalDescription">{{ modalData?.event.meetingPlace }}</span>
         </div>
-
-        <div>
-            <div>Location:</div>
-            <h3>{{ modalData?.event.meetingPlace }}</h3>
-        </div>
+        <!-- end of setting up content of modal body -->
 
 
     </div>
     <!-- modal body end -->
 
     <!-- modal footer -->
-    <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" (click)="close()">
-            OK
+    <div class="modal-footer justify-content-between">
+        <!-- update button-->
+        <button type="button" class="btn btn-success" (click)="updateMeeting(modalData?.event.meetingId)">
+            Update
+        </button>
+
+        <!-- delete button -->
+        <button type="button" class="btn btn-danger" (click)="close()">
+            Delete
+        </button>
+
+        <!-- closing the modal without doing anything -->
+        <button type="button" class="btn btn-info" (click)="close()">
+            Done
         </button>
     </div>
     <!-- end of modal footer -->

@@ -19,45 +19,50 @@
                     <!-- form begins -->
                     <form>
                         <div class="form-group">
-                            <label class="sr-only" for="meetingTopic">Title</label>
-                            <input type="text" class="form-control" id="meetingTopic" placeholder="Meeting Topic">
-                        </div>
-
-                        <div class="form-group" *ngIf="allUsers">
-                            <label class="sr-only" for="nameSelect">preference</label>
-                            <select class="custom-select" id="nameSelect">
-                                <option selected>Choose...</option>
-                                <option *ngFor="let user of allUsers" value="user.userName">{{user.userName}}
-                                </option>
-                            </select>
-                            <small class="form-text text-muted">select user</small>
+                            <label class="sr-only" for="meetingTopic">topic</label>
+                            <input type="text" class="form-control" id="meetingTopic" placeholder="Meeting Topic"
+                                [(ngModel)]="topic" name="topic">
                         </div>
 
                         <div class="form-group">
                             <label class="sr-only" for="description">description</label>
-                            <input type="text" class="form-control" id="description" placeholder="Meeting Description">
+                            <textarea type="text" class="form-control text-justify" id="description"
+                                placeholder="Meeting Description" [(ngModel)]="description"
+                                name="description"></textarea>
                         </div>
 
                         <div class="form-group">
                             <label class="sr-only" for="meetingStartDate">Start Date</label>
-                            <input type="date" class="form-control" id="meetingStartDate">
+                            <input id="meetingStartDate" [owlDateTime]="date1" name="startDate" [(ngModel)]="startDate"
+                                placeholder="Start Date Time">
+
+                            <span [owlDateTimeTrigger]="date1">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                            </span>
+                            <owl-date-time #date1></owl-date-time>
 
                             <small class="form-text text-muted">Meeting start date</small>
                         </div>
 
                         <div class="form-group">
                             <label class="sr-only" for="meetingEndDate">End Date</label>
-                            <input type="date" class="form-control" id="meetingEndDate">
+                            <input id="meetingEndDate" [owlDateTime]="date2" name="endDate" [(ngModel)]="endDate"
+                                placeholder="End Date Time">
+
+                            <span [owlDateTimeTrigger]="date2">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                            </span>
+                            <owl-date-time #date2></owl-date-time>
                             <small class="form-text text-muted">Meeting end date</small>
                         </div>
 
                         <div class="form-group">
                             <label class="sr-only" for="meetingPlace">meeting place</label>
-                            <input type="text" class="form-control" id="meetingPlace" placeholder="Meeting Place">
+                            <input [(ngModel)]="meetingPlace" name="meetingPlace" type="text" class="form-control" id="meetingPlace" placeholder="Meeting Place">
                         </div><br>
 
                         <div class="row justify-content-between">
-                            <button class="btn btn-outline-success">Create</button>
+                            <button class="btn btn-outline-success" (click)="updateMeeting()">Update</button>
                             <button class="btn btn-outline-success" (click)="goBack()">Back</button>
                         </div>
                     </form>

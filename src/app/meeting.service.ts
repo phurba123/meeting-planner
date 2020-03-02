@@ -40,4 +40,23 @@ export class MeetingService {
     
     return this.http.get(`${this.baseUrl}/${userId}/view/all?authToken=${authToken}`);
   }//end getUsers function
+
+  //getting single meeting by meeting id
+  public getSingleMeetingById(meetingId)
+  {
+    return this.http.get(`${this.baseUrl}/${meetingId}/view`);
+  }
+  //end of getting single meeting by meeting id
+
+  // updating meeting
+  public updateMeeting(meetingId,data){
+    const params = new HttpParams()
+    .set('topic',data.topic)
+    .set('meetingDescription',data.meetingDescription)
+    .set('meetingPlace',data.meetingPlace)
+    .set('meetingStartDate',data.meetingStartDate)
+    .set('meetingEndDate',data.meetingEndDate);
+
+    return this.http.put(`${this.baseUrl}/${meetingId}/updateMeeting`,params);
+  }
 }

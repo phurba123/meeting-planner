@@ -191,15 +191,23 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   eventTimesChanged({ event, newStart, newEnd }: CalendarEventTimesChangedEvent): void {
-    event.start = newStart;
-    event.end = newEnd;
+    event.start = new Date( newStart);
+    event.end = new Date(newEnd);
     this.handleEvent('Dropped or resized', event);
     this.refresh.next();
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
     this.modalData = { event, action };
-    this.modal.open(this.modalContent, { size: 'lg' });
+    console.log('handle event',event)
+    this.modal.open(this.modalContent, { size: 'lg',scrollable:true });
+  }
+
+  public updateMeeting(meetingId)
+  {
+    console.log(meetingId);
+    this.router.navigate([`meeting/${meetingId}/update`]);
+    this.modal.dismissAll()
   }
 
   private deleteCookiesAndLocalStorage() {
