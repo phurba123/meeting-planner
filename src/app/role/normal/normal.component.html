@@ -28,7 +28,6 @@
         <!-- row-1 second column/last -->
         <div class="col-md-7">
 
-            <div class="container">
                 <!-- row-2  -->
                 <div class="row">
                     <!-- row-2 coloumn one -->
@@ -51,7 +50,7 @@
                     <!-- row-2 column one end -->
 
                     <!-- row-2 second column -->
-                    <div class="col-md-4">
+                    <div class="offset-md-1 col-md-3">
                         <h4>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h4>
                     </div>
                     <!-- row-2 second column end -->
@@ -61,7 +60,7 @@
                         <div class="btn-group">
                             <div class="btn btn-outline-success" mwlCalendarPreviousView [view]="view"
                                 [(viewDate)]="viewDate" (viewDateChange)="closeOpenMonthViewDay()">
-                                Previous
+                                Prev
                             </div>
                             <div class="btn btn-outline-success" mwlCalendarToday [(viewDate)]="viewDate">
                                 Today
@@ -76,7 +75,6 @@
 
                 </div>
                 <!-- row-2 end -->
-            </div>
 
             <!--switching the view of calendar-->
             <div [ngSwitch]='view'>
@@ -108,8 +106,8 @@
 <!-- angular template for showing meeting detail in modal -->
 <ng-template #modalContent let-close="close">
     <!-- modal header -->
-    <div class="modal-header">
-        <h5 class="modal-title">Meeting-Detail</h5>
+    <div class="modal-header bg-dark">
+        <h5 class="modal-title text-white font-weight-bold">Meeting-Detail</h5>
         <button type="button" class="close" (click)="close()">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -120,34 +118,35 @@
     <div class="modal-body">
 
         <div>
-            <div>Organiser:</div>
-            <h3>{{ modalData?.event.hostName }}</h3>
-        </div>
+            <cite class="modalLabel">Organiser:</cite>
+            <span class="modalDescription">{{ modalData?.event.hostName }}</span>
+        </div><hr>
 
         <div>
-            <div>Event-Topic:</div>
-            <h3>{{ modalData?.event.topic }}</h3>
-        </div>
+            <cite class="modalLabel">Event-Topic:</cite>
+            <span class="modalDescription">{{ modalData?.event.topic }}</span>
+        </div><hr>
+
+        <div class="d-flex">
+            <cite class="modalLabel">Description:</cite>
+            <p class="modalDescription text-justify">{{ modalData?.event.meetingDescription }}</p>
+        </div><hr>
 
         <div>
-            <div>Description:</div>
-            <h3>{{ modalData?.event.description }}</h3>
-        </div>
+            <cite class="modalLabel">Participant:</cite>
+            <span class="modalDescription">{{ modalData?.event.participantName }}</span>
+        </div><hr>
 
         <div>
-            <div>Participant:</div>
-            <h3>{{ modalData?.event.participantName }}</h3>
-        </div>
+            <cite class="modalLabel">Date:</cite>
+            <span class="modalDescription">{{ modalData?.event.start | date:"medium" }} 
+                - {{modalData?.event.end | date:"medium"}}</span>
+        </div><hr>
 
         <div>
-            <div>Date:</div>
-            <h3>{{ modalData?.event.start | date }} - {{modalData?.event.end | date}}</h3>
-        </div>
-
-        <div>
-            <div>Location:</div>
-            <h3>{{ modalData?.event.meetingPlace }}</h3>
-        </div>
+            <cite class="modalLabel">Location:</cite>
+            <span class="modalDescription">{{ modalData?.event.meetingPlace }}</span>
+        </div><hr>
 
 
     </div>
@@ -155,8 +154,8 @@
 
     <!-- modal footer -->
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" (click)="close()">
-            OK
+        <button type="button" class="btn btn-info" (click)="close()">
+            Done
         </button>
     </div>
     <!-- end of modal footer -->

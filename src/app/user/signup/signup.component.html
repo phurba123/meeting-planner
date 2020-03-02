@@ -16,15 +16,15 @@
 <div class="container">
     <h3 class="text-center" style="color: deepskyblue">SignUp</h3>
     <br>
-    <div class="row">
-        <div class='col-md-4 offset-md-4'>
+    <div class="row justify-content-center">
+        <div class='col-md-6 col-lg-4'>
             <!-- beginning of signup form -->
             <form>
                 <!-- firstName -->
                 <div class="form-group">
                     <label for="inputFirstName" class="sr-only">FirstName</label>
                     <input type="text" class="form-control" id="inputFirstName" name="firstName" [(ngModel)]="firstName"
-                        placeholder="FirstName" required #inputFirstName="ngModel" autofocus>
+                        placeholder="FirstName" required #inputFirstName="ngModel">
 
                     <!-- firstName validation -->
                     <div *ngIf="inputFirstName.invalid && (inputFirstName.dirty||inputFirstName.touched)"
@@ -62,11 +62,32 @@
                     <!-- end of userName validation -->
                 </div>
 
-                <!-- mobileNumber -->
+                <!-- choosing country -->
                 <div class="form-group">
-                    <label for="inputNumber" class="sr-only">Mobile</label>
-                    <input type="number" class="form-control" id="inputNumber" [(ngModel)]="mobileNumber"
-                        name="mobileNumber" placeholder="MobileNumber" required>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="chooseCountry"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Select Country
+                        </button>
+                        <div class="dropdown-menu scrollOnDropdown" aria-labelledby="chooseCountry">
+                            <option class="dropdown-item" *ngFor="let singleCountry of countries"
+                                (click)="singleCountrySelect(singleCountry)">{{singleCountry.country}}
+                            </option>
+                        </div>
+                        <small class="ml-1 text-success">{{selectedCountry}}</small>
+                    </div>
+                    
+                </div>
+
+
+                <!-- mobileNumber -->
+                <div class="input-group form-group">
+                    <div class="input-group-prepend">
+                        <span *ngIf="selectedCountryCode" class="input-group-text" id="numberCode">+{{selectedCountryCode}}</span>
+                    </div>
+                    <!-- <label for="inputNumber" class="sr-only">Mobile</label> -->
+                    <input type="number" class="form-control"  [(ngModel)]="mobileNumber"
+                        name="mobileNumber" placeholder="MobileNumber" aria-describedby="numberCode" required>
                 </div>
 
                 <!-- email -->
@@ -90,7 +111,7 @@
                 <div class="form-group">
                     <label for="inputPassword" class="sr-only">Password</label>
                     <input type="password" class="form-control" id="inputPassword" [(ngModel)]="password"
-                        name="password" #inputPassword="ngModel" placeholder="Password" minlength="8" 
+                        name="password" #inputPassword="ngModel" placeholder="Password" minlength="8"
                         (keydown)="signUpUsingKeyPress($event)" required>
 
                     <!-- password validation -->

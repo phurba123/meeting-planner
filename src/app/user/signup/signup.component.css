@@ -1,0 +1,14 @@
+.scrollOnDropdown
+{
+    height: 40vh;
+    overflow-y: scroll
+}
+
+@media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    .scrollOnDropdown
+    {
+    height: 30vh;
+    overflow-y: scroll
+    }
+}

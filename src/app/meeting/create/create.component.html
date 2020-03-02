@@ -45,9 +45,8 @@
                                 <div class="dropdown-menu scrollOnDropdown" aria-labelledby="dropdownMenuButton">
                                     <option class="dropdown-item" *ngFor="let user of allUsers"
                                         (click)="selectFromDropdown(user)">
-                                     {{user.userName}}</option>
-
-
+                                        {{user.userName}}
+                                    </option>
                                 </div>
                             </div>
                             <small class="form-text text-muted">{{selectedUserName}}</small>
@@ -55,8 +54,8 @@
 
                         <div class="form-group">
                             <label class="sr-only" for="description">description</label>
-                            <input type="text" class="form-control" id="description" placeholder="Meeting Description"
-                                [(ngModel)]="description" name="description">
+                            <textarea type="text" class="form-control" id="description" placeholder="Meeting Description"
+                                [(ngModel)]="description" name="description"></textarea>
                         </div>
 
                         <div class="form-group">

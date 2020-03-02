@@ -155,7 +155,8 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   //logout function
   public logOut() {
-    this.userService.logOut(this.receiverUserId).subscribe(
+    console.log(this.receiverUserId)
+    this.userService.logOut(this.userInfo.userId).subscribe(
       (apiResponse) => {
         if (apiResponse['status'] === 200) {
           this.toastr.success('You are logged out', 'LogOut successfull');

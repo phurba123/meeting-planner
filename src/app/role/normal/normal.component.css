@@ -4,6 +4,16 @@
     font-size:22px;
 }
 
+.modalLabel
+{
+    font-weight: bold
+}
+
+.modalDescription
+{
+    padding-left: 6vw
+}
+
 
 @media only screen and (max-width: 768px) {
     /* For mobile phones: */

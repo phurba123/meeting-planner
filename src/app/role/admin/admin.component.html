@@ -19,7 +19,7 @@
     <div class="row">
 
         <!-- row-1 first column -->
-        <div class="col-md-4 mt-md-4">
+        <div class="col-md-3 mt-md-4">
             <p class="text-success" id="welcomemsg">Welcome {{receiverUserName}}</p>
 
             <!-- displaying all users -->
@@ -35,10 +35,8 @@
         <!-- row-1 first column end -->
 
         <!-- row-1 second column/last -->
-        <div class="col-md-7">
-
-            <div class="container">
-                <!-- row-2  -->
+        <div class="col-md-8">
+                <!-- row-2 ,nested inside 1strow/2ndcolumn  -->
                 <div class="row">
                     <!-- row-2 coloumn one -->
                     <div class="col-md-4">
@@ -60,7 +58,7 @@
                     <!-- row-2 column one end -->
 
                     <!-- row-2 second column -->
-                    <div class="col-md-4">
+                    <div class="offset-md-1 col-md-3">
                         <h4>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h4>
                     </div>
                     <!-- row-2 second column end -->
@@ -84,8 +82,7 @@
                     <!-- row-2 third column/last end -->
 
                 </div>
-                <!-- row-2 end -->
-            </div>
+                <!-- row-2,nested inside 1strow/2ndcolumn end -->
 
             <!--switching the view of calendar-->
             <div [ngSwitch]='view'>
@@ -130,7 +127,7 @@
 
         <!-- setting up content of modal body -->
         <div>
-            <label class="modalLabel">Organiser:</label>
+            <cite class="modalLabel">Organiser:</cite>
             <span class="modalDescription">{{ modalData?.event.hostName }}</span>
         </div><hr>
 

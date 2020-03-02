@@ -87,6 +87,18 @@ export class UserService implements OnInit {
     return this.http.get(`${this.backendUrl}/view/all?authToken=${authToken}`);
   }
 
+  //getting countries
+  public getCountries()
+  {
+    return this.http.get('../assets/countryNames.json')
+  }//end of getting countries
+
+  //getting country codes
+  public getCountryCodes()
+  {
+    return this.http.get('../assets/countryCodes.json');
+  }
+
 
 
   private handleError(err: HttpErrorResponse) {

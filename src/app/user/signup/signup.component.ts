@@ -15,6 +15,9 @@ export class SignupComponent implements OnInit {
   public email: string;
   public password: any;
   public userName: string;
+  public countries:any[]=[];
+  public selectedCountry:string;
+  public selectedCountryCode:any;
 
   constructor(
     private userService: UserService,
@@ -23,6 +26,7 @@ export class SignupComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.initializeCountries();
   }
 
   //function for signing up
@@ -78,6 +82,50 @@ export class SignupComponent implements OnInit {
     {
       this.signUp();
     }
+  }
+
+  //initializing countries
+  public initializeCountries()
+  {
+    this.userService.getCountries().subscribe((data)=>
+    {
+      for(let x in data)
+      {
+        let countryObj ={
+          code:x,
+          country:data[x]
+        }
+        //push country object in countries array
+        this.countries.push(countryObj)
+      }
+    },
+    (err)=>
+    {
+      console.log(err.error.message)
+    })
+  }
+
+  //selected single country from template
+  public singleCountrySelect(singleCountry)
+  {
+    this.selectedCountry=singleCountry.country
+    console.log(singleCountry);
+    this.userService.getCountryCodes().subscribe((data)=>
+    {
+      for(let x in data)
+      {
+        if(x === singleCountry.code)
+        {
+          //storing the code of selected country from template
+         this.selectedCountryCode = data[x];
+         console.log(this.selectedCountryCode) 
+        }
+      }
+    },
+    (err)=>
+    {
+      console.log(err.error.message)
+    })
   }
 
 }
