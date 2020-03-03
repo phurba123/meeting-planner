@@ -1,20 +1,22 @@
 import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client'
-import {Observable, observable} from 'rxjs'
+import { Observable } from 'rxjs'
 
 @Injectable({
   providedIn: 'root'
 })
 export class SocketService {
   private baseUrl = "http://localhost:3000";
-  private socket;
+  public socket;
 
   constructor() {
     //connection to base url
     this.socket = io(this.baseUrl)
   }
 
-  //events that has to be listened
+  /**
+   * events to be listened
+   */
 
   //verify user
   public verifyUser = () => {
@@ -25,13 +27,44 @@ export class SocketService {
     });//end observable
   }//end verifyUser
 
-  //end of events to be listened
+  //getting online user list
+  public getOnlineUserList = () => {
+    return Observable.create((observer) => {
+      this.socket.on('online-user-list', (userList) => {
+        observer.next(userList);
+      });//end On method
+    });//end observable
 
-  //events to be emitted
+  }//end onlineUserList
+
+   /**
+   * end of events to be listened
+   */
+
+
+
+  /** 
+   * events to be emitted
+   */
 
   //set user
-  public setUser =(token)=>
-  {
-    this.socket.emit('set-user',token)
+  public setUser = (token) => {
+    this.socket.emit('set-user', token)
   }//end of set user
+
+  //disconnecting socket
+  public disconnectSocket = () => {
+    return Observable.create((observer) => {
+      this.socket.emit('disconnect', () => {
+        observer.next();
+      });
+    });//end observable
+
+  }//end socket disconnect
+
+
+
+  public exitSocket = () =>{
+    this.socket.disconnect();
+  }// end exit socket
 }

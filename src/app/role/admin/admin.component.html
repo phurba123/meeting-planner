@@ -24,10 +24,16 @@
 
             <!-- displaying all users -->
             <div id="scroller" *ngIf="allUsers">
-                <ul class="list-unstyled border justify-content-center d-flex" *ngFor="let user of allUsers">
+                <ul class="list-unstyled border" *ngFor="let user of allUsers">
+
                     <a type="button" class="btn btn-info text-white" (click)="getSelectedUserMeeting(user.userId)"
-                        id="userNameDisplay">
-                        {{user.userName}}</a>
+                        id="userNameDisplay" *ngIf="user.userId!=receiverUserId">
+                        {{user.userName}}
+
+                        <span *ngIf="user.status === 'online'"><i class="online float-right"></i></span>
+                        <span *ngIf="user.status != 'online'"><i class="offline float-right"></i></span>
+                    </a>
+
                 </ul>
             </div>
 
@@ -36,53 +42,53 @@
 
         <!-- row-1 second column/last -->
         <div class="col-md-8">
-                <!-- row-2 ,nested inside 1strow/2ndcolumn  -->
-                <div class="row">
-                    <!-- row-2 coloumn one -->
-                    <div class="col-md-4">
-                        <div class="btn-group">
-                            <div class="btn btn-outline-success" (click)="setView(CalendarView.Month)"
-                                [class.active]="view === CalendarView.Month">
-                                Month
-                            </div>
-                            <div class="btn btn-outline-success" (click)="setView(CalendarView.Week)"
-                                [class.active]="view === CalendarView.Week">
-                                Week
-                            </div>
-                            <div class="btn btn-outline-success" (click)="setView(CalendarView.Day)"
-                                [class.active]="view === CalendarView.Day">
-                                Day
-                            </div>
+            <!-- row-2 ,nested inside 1strow/2ndcolumn  -->
+            <div class="row">
+                <!-- row-2 coloumn one -->
+                <div class="col-md-4">
+                    <div class="btn-group">
+                        <div class="btn btn-outline-success" (click)="setView(CalendarView.Month)"
+                            [class.active]="view === CalendarView.Month">
+                            Month
+                        </div>
+                        <div class="btn btn-outline-success" (click)="setView(CalendarView.Week)"
+                            [class.active]="view === CalendarView.Week">
+                            Week
+                        </div>
+                        <div class="btn btn-outline-success" (click)="setView(CalendarView.Day)"
+                            [class.active]="view === CalendarView.Day">
+                            Day
                         </div>
                     </div>
-                    <!-- row-2 column one end -->
-
-                    <!-- row-2 second column -->
-                    <div class="offset-md-1 col-md-3">
-                        <h4>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h4>
-                    </div>
-                    <!-- row-2 second column end -->
-
-                    <!-- row-2 third and last column/last -->
-                    <div class="col-md-4">
-                        <div class="btn-group">
-                            <div class="btn btn-outline-success" mwlCalendarPreviousView [view]="view"
-                                [(viewDate)]="viewDate" (viewDateChange)="closeOpenMonthViewDay()">
-                                Prev
-                            </div>
-                            <div class="btn btn-outline-success" mwlCalendarToday [(viewDate)]="viewDate">
-                                Today
-                            </div>
-                            <div class="btn btn-outline-success" mwlCalendarNextView [view]="view"
-                                [(viewDate)]="viewDate" (viewDateChange)="closeOpenMonthViewDay()">
-                                Next
-                            </div>
-                        </div>
-                    </div>
-                    <!-- row-2 third column/last end -->
-
                 </div>
-                <!-- row-2,nested inside 1strow/2ndcolumn end -->
+                <!-- row-2 column one end -->
+
+                <!-- row-2 second column -->
+                <div class="offset-md-1 col-md-3">
+                    <h4>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h4>
+                </div>
+                <!-- row-2 second column end -->
+
+                <!-- row-2 third and last column/last -->
+                <div class="col-md-4">
+                    <div class="btn-group">
+                        <div class="btn btn-outline-success" mwlCalendarPreviousView [view]="view"
+                            [(viewDate)]="viewDate" (viewDateChange)="closeOpenMonthViewDay()">
+                            Prev
+                        </div>
+                        <div class="btn btn-outline-success" mwlCalendarToday [(viewDate)]="viewDate">
+                            Today
+                        </div>
+                        <div class="btn btn-outline-success" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
+                            (viewDateChange)="closeOpenMonthViewDay()">
+                            Next
+                        </div>
+                    </div>
+                </div>
+                <!-- row-2 third column/last end -->
+
+            </div>
+            <!-- row-2,nested inside 1strow/2ndcolumn end -->
 
             <!--switching the view of calendar-->
             <div [ngSwitch]='view'>
@@ -129,28 +135,33 @@
         <div>
             <cite class="modalLabel">Organiser:</cite>
             <span class="modalDescription">{{ modalData?.event.hostName }}</span>
-        </div><hr>
+        </div>
+        <hr>
 
         <div>
             <cite class="modalLabel">Event-Topic:</cite>
             <span class="modalDescription">{{ modalData?.event.topic }}</span>
-        </div><hr>
+        </div>
+        <hr>
 
         <div class="d-flex">
             <cite class="modalLabel">Description:</cite>
             <p class="text-justify modalDescription">{{ modalData?.event.meetingDescription }}</p>
-        </div><hr>
+        </div>
+        <hr>
 
         <div>
             <cite class="modalLabel">Participant:</cite>
             <span class="modalDescription">{{ modalData?.event.participantName }}</span>
-        </div><hr>
+        </div>
+        <hr>
 
         <div>
             <cite class="modalLabel">Date:</cite>
             <span class="modalDescription">{{ modalData?.event.start| date:"medium"}}
-                 - {{modalData?.event.end | date:"medium"}}</span>
-        </div><hr>
+                - {{modalData?.event.end | date:"medium"}}</span>
+        </div>
+        <hr>
 
         <div>
             <cite class="modalLabel">Location:</cite>
@@ -170,8 +181,8 @@
         </button>
 
         <!-- delete button -->
-        <button type="button" class="btn btn-danger" 
-        (click)="deleteMeeting(modalData?.event.meetingId,modalData?.event)">
+        <button type="button" class="btn btn-danger"
+            (click)="deleteMeeting(modalData?.event.meetingId,modalData?.event)">
             Delete
         </button>
 

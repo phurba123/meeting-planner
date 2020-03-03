@@ -9,6 +9,7 @@ import { MeetingService } from 'src/app/meeting.service';
 import { Subject } from 'rxjs'
 import { isSameMonth, isSameDay, addHours } from 'date-fns'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { SocketService } from 'src/app/socket.service';
 
 const colors: any = {
 
@@ -51,6 +52,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   public receiverUserName;
   public allUsers: any
   public userInfo;
+  public onlineUsers: any[] = [];
 
   public activeDayIsOpen: boolean = true;
 
@@ -74,7 +76,8 @@ export class AdminComponent implements OnInit, OnDestroy {
     private router: Router,
     private cookie: CookieService,
     private meetingService: MeetingService,
-    private modal: NgbModal
+    private modal: NgbModal,
+    private socketService: SocketService
   ) { }
 
   ngOnInit(): void {
@@ -84,11 +87,51 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.receiverUserName = this.userInfo.userName;
     this.authToken = this.cookie.get('authToken');
 
-    this.getAllUsers()
-
-
-
+    if (this.userService.isAdmin(this.receiverUserName)) {
+      this.verifyUser();
+      this.getAllUsers();
+      this.getOnlineUsers();
+    }
+    else {
+      this.router.navigate(['/']);
+    }
   }
+
+  //verifying user
+  public verifyUser() {
+    this.socketService.verifyUser()
+      .subscribe(() => {
+        //once user is verified than set him/her online
+        this.socketService.setUser(this.authToken);
+
+      });//end subscribe
+  }//end verifyUser
+
+  //getting all online users
+  public getOnlineUsers() {
+    this.socketService.getOnlineUserList().subscribe((data) => {
+
+      this.onlineUsers = []//emptying array
+
+      //looping through the properties of onlineUsers data fetched from server
+      for (let x in data) {
+        console.log('x', x);
+
+        this.onlineUsers.push(x);//storing userId of online users data on componenet onlineUsers
+      }//end of for in loop
+
+      //looping through the values of allUsers
+      for (let user of this.allUsers) {
+
+        if (this.onlineUsers.includes(user.userId)) {
+          user.status = "online"//setting user online 
+        } else {
+          user.status = "offline"//setting user offline
+        }
+
+      }//end of for of loop
+    })
+  }//end of getting all OnlineUsers
 
   //getting all the users
   public getAllUsers() {
@@ -165,6 +208,10 @@ export class AdminComponent implements OnInit, OnDestroy {
           }, 1000);
 
           this.deleteCookiesAndLocalStorage();
+
+          //disconnect socket to be emitted when log out
+          this.socketService.disconnectSocket()
+          this.socketService.exitSocket()
         }
         else {
           this.toastr.error(apiResponse['message'], 'LogOut failed')
@@ -200,7 +247,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   handleEvent(action: string, event: CalendarEvent): void {
     this.modalData = { event, action };
-    console.log('handle event', event)
+    //console.log('handle event', event)
     this.modal.open(this.modalContent, { size: 'lg', scrollable: true });
   }
 
@@ -212,13 +259,13 @@ export class AdminComponent implements OnInit, OnDestroy {
   }//end of updating meeting
 
   //deleting meeting
-  public deleteMeeting(meetingId,eventToDelete) {
+  public deleteMeeting(meetingId, eventToDelete) {
     this.meetingService.deleteMeeting(meetingId).subscribe((apiResponse) => {
       if (apiResponse['status'] === 200) {
         this.toastr.success(apiResponse['message']);
         setTimeout(() => {
           this.dismissModal()
-        },1000);
+        }, 1000);
         this.events = this.events.filter(event => event !== eventToDelete);
         this.refresh.next()
       }

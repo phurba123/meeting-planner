@@ -135,6 +135,10 @@ export class NormalComponent implements OnInit {
           //deleting local storage and cookies upon logout
           this.userService.removeUserInfoFromLocalStorage();
           this.cookie.delete('authToken');
+          //disconnect socket to be emitted
+          this.socketService.disconnectSocket()
+
+          this.socketService.exitSocket()
         }
         else {
           this.toastr.error(apiResponse['message'], 'LogOut fail');

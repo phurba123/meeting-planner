@@ -99,6 +99,12 @@ export class UserService implements OnInit {
     return this.http.get('../assets/countryCodes.json');
   }
 
+  //reset password
+  public resetPassword(email)
+  {
+    return this.http.get(`${this.backendUrl}/${email}/recoverPassword`)
+  }
+
 
 
   private handleError(err: HttpErrorResponse) {

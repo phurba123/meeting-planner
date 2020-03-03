@@ -37,7 +37,12 @@
                         name="password" placeholder="Password" (keydown)="loginUsingKeyPress($event)" required>
                 </div>
 
-                <button type="button" (click)="logIn()" class="btn btn-outline-info">Sign In</button>
+                <div class="d-flex justify-content-between">
+                    <button type="button" (click)="logIn()" class="btn btn-outline-info">Sign In</button>
+                    <a [routerLink]="['/forgotpassword']"> <small class="text-muted">Forgot password?</small></a>
+                </div>
+
+                
             </form>
             <!-- end of sign in form -->
         </div>
