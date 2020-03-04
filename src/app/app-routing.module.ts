@@ -8,6 +8,7 @@ import { PageNotFoundComponent } from './errors/page-not-found/page-not-found.co
 import { CreateComponent } from './meeting/create/create.component';
 import { UpdateComponent } from './meeting/update/update.component';
 import { ForgotPasswordComponent } from './user/forgot-password/forgot-password.component';
+import { ServerErrorComponent } from './errors/server-error/server-error.component';
 
 // all routes in our application
 const routes: Routes = [
@@ -22,6 +23,7 @@ const routes: Routes = [
   {path:'meeting/create',component:CreateComponent},
   {path:'meeting/:meetingId/update',component:UpdateComponent},
 
+  {path:'error/server',component:ServerErrorComponent},
   {path:'**',component:PageNotFoundComponent},
 ];
 

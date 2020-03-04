@@ -1,0 +1,23 @@
+#error500
+{
+    font-size: 4vw
+}
+
+@media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+
+     #error500
+    {
+        font-size: 8vw
+    }
+
+    #txt1
+    {
+        font-size: 6vw
+    }
+
+    #txt2
+    {
+        font-size: 4vw
+    }
+  }

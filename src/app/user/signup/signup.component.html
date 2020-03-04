@@ -16,6 +16,7 @@
 <div class="container">
     <h3 class="text-center" style="color: deepskyblue">SignUp</h3>
     <br>
+
     <div class="row justify-content-center">
         <div class='col-md-6 col-lg-4'>
             <!-- beginning of signup form -->
@@ -64,6 +65,7 @@
 
                 <!-- choosing country -->
                 <div class="form-group">
+
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="chooseCountry"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -76,18 +78,19 @@
                         </div>
                         <small class="ml-1 text-success">{{selectedCountry}}</small>
                     </div>
-                    
+
                 </div>
 
 
                 <!-- mobileNumber -->
                 <div class="input-group form-group">
                     <div class="input-group-prepend">
-                        <span *ngIf="selectedCountryCode" class="input-group-text" id="numberCode">+{{selectedCountryCode}}</span>
+                        <span *ngIf="selectedCountryCode" class="input-group-text"
+                            id="numberCode">+{{selectedCountryCode}}</span>
                     </div>
                     <!-- <label for="inputNumber" class="sr-only">Mobile</label> -->
-                    <input type="number" class="form-control"  [(ngModel)]="mobileNumber"
-                        name="mobileNumber" placeholder="MobileNumber" aria-describedby="numberCode" required>
+                    <input type="number" class="form-control" [(ngModel)]="mobileNumber" name="mobileNumber"
+                        placeholder="MobileNumber" aria-describedby="numberCode" required>
                 </div>
 
                 <!-- email -->

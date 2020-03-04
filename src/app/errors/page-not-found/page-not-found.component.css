@@ -1,9 +1,23 @@
 
 .code404
 {
-    font-size:16vw;
+    font-size:12vw;
     color:red
 }
 p{
-    font-size: 3vw
+    font-size: 2vw
 }
+
+@media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    .code404
+    {
+        font-size:16vw;
+        color:red
+    }
+
+    p{
+        font-size: 5vw
+    }
+    
+  }
