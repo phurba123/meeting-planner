@@ -42,9 +42,10 @@ export class UserService implements OnInit {
   }//end of login
 
   //for logout
-  public logOut(userId) {
+  public logOut(userId,authToken) {
     const params = new HttpParams()
       .set('userId', userId)
+      .set('authToken',authToken)
 
     let data = {};
     console.log('inside logout')
@@ -52,18 +53,25 @@ export class UserService implements OnInit {
   }
 
   //setting userInfo on local storage
-  public setUserInfoOnLocalStorage(data) {
+  public setUserInfoOnLocalStorage(data,authToken) {
+    
     localStorage.setItem('userInfo', JSON.stringify(data))
+    localStorage.setItem('authToken',authToken)
   }
 
   //removing UserInfo From LocalStorage
   public removeUserInfoFromLocalStorage() {
     localStorage.removeItem('userInfo');
+    localStorage.removeItem('authToken')
   }
 
   //getting userInfo from local storage
   public getUserInfoFromLocalStorage() {
-    return JSON.parse(localStorage.getItem('userInfo'));
+    let data={
+      'userInfo':JSON.parse(localStorage.getItem('userInfo')),
+      'authToken':localStorage.getItem('authToken')
+    }
+    return data;
   }
 
   //check if user is admin or not

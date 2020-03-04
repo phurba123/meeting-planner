@@ -14,7 +14,7 @@ export class MeetingService {
   ) { }
 
   //adding new meeting
-  public addNewMeeting(data)
+  public addNewMeeting(data,authToken)
   {
     console.log(data)
 
@@ -29,6 +29,7 @@ export class MeetingService {
     .set('meetingEndDate',data.meetingEndDate)
     .set('meetingDescription',data.meetingDescription)
     .set('meetingPlace',data.meetingPlace)
+    .set('authToken',authToken)
 
     return this.http.post(this.baseUrl+'/addMeeting',params);
 
@@ -42,27 +43,29 @@ export class MeetingService {
   }//end getUsers function
 
   //getting single meeting by meeting id
-  public getSingleMeetingById(meetingId)
+  public getSingleMeetingById(meetingId,authToken)
   {
-    return this.http.get(`${this.baseUrl}/${meetingId}/view`);
+    return this.http.get(`${this.baseUrl}/${meetingId}/view?authToken=${authToken}`);
   }
   //end of getting single meeting by meeting id
 
   // updating meeting
-  public updateMeeting(meetingId,data){
+  public updateMeeting(meetingId,data,authToken){
     const params = new HttpParams()
     .set('topic',data.topic)
     .set('meetingDescription',data.meetingDescription)
     .set('meetingPlace',data.meetingPlace)
     .set('meetingStartDate',data.meetingStartDate)
-    .set('meetingEndDate',data.meetingEndDate);
+    .set('meetingEndDate',data.meetingEndDate)
+    .set('authToken',authToken);
 
     return this.http.put(`${this.baseUrl}/${meetingId}/updateMeeting`,params);
   }//end of updating meeting
 
-  public deleteMeeting(meetingId)
+  public deleteMeeting(meetingId,authToken)
   {
-    let data = {};
-    return this.http.post(`${this.baseUrl}/${meetingId}/deleteMeeting`,data);
+    const params = new HttpParams()
+    .set('authToken',authToken)
+    return this.http.post(`${this.baseUrl}/${meetingId}/deleteMeeting`,params);
   }
 }

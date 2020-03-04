@@ -15,7 +15,6 @@ import { RoleModule } from './role/role.module';
 import { ErrorsModule } from './errors/errors.module';
 import { UserService } from './user.service';
 import {HttpClientModule} from '@angular/common/http'
-import { CookieService } from 'ngx-cookie-service';
 import { MeetingModule } from './meeting/meeting.module';
 import { MeetingService } from './meeting.service';
 import { SocketService } from './socket.service';
@@ -42,7 +41,7 @@ import { SocketService } from './socket.service';
     }),
     AppRoutingModule,
   ],
-  providers: [UserService,MeetingService,SocketService,CookieService],
+  providers: [UserService,MeetingService,SocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

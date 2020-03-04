@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../user.service';
 import { Router } from '@angular/router'
-import { CookieService } from 'ngx-cookie-service'
 
 @Component({
   selector: 'app-login',
@@ -17,8 +16,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private toast: ToastrService,
     private userService: UserService,
-    private router: Router,
-    private cookie:CookieService
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -49,14 +47,8 @@ export class LoginComponent implements OnInit {
             let userName = data.data.userDetails.userName;
             //console.log(userName);
 
-            //setting cookie
-            this.cookie.set('authToken', data.data.authToken);
-            // this.cookie.set('receiverUserName', userName)
-            // this.cookie.set('receiverUserId', data.data.userDetails.userId);
-            //end of setting cookie
-
             //setting userInfo on local storage
-            this.userService.setUserInfoOnLocalStorage(data.data.userDetails);
+            this.userService.setUserInfoOnLocalStorage(data.data.userDetails,data.data.authToken);
 
             //console.log(this.userService.isAdmin(userName))
 

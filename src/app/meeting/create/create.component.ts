@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../user.service'
-// import {Cookie} from 'ng2-cookies'
-import {CookieService} from 'ngx-cookie-service'
 import { Location } from '@angular/common'
 import { MeetingService } from 'src/app/meeting.service';
 import { ToastrService } from 'ngx-toastr';
@@ -35,20 +33,19 @@ export class CreateComponent implements OnInit {
     public location: Location,
     private meetingService: MeetingService,
     private toastr: ToastrService,
-    private router: Router,
-    private cookie:CookieService
+    private router: Router
   ) { }
 
 
   ngOnInit(): void {
     console.log('onInit create')
 
-    // let cookieObj= this.userService.getCookieData();
-    let userDetail = this.userService.getUserInfoFromLocalStorage();
+    let localStorage = this.userService.getUserInfoFromLocalStorage();
 
-    this.receiverUserId=userDetail.userId
-    this.receiverUserName=userDetail.userName;
-    this.authToken=this.cookie.get('authToken')
+    this.receiverUserId=localStorage.userInfo.userId
+    this.receiverUserName=localStorage.userInfo.userName;
+    this.authToken=localStorage.authToken
+    console.log(this.authToken)
     if(this.userService.isAdmin(this.receiverUserName))
     {
       this.getAllUsers();
@@ -113,7 +110,7 @@ export class CreateComponent implements OnInit {
       }
       console.log(meetingObj)
 
-      this.meetingService.addNewMeeting(meetingObj).subscribe(
+      this.meetingService.addNewMeeting(meetingObj,this.authToken).subscribe(
         (apiResponse) => {
           if (apiResponse['status'] === 200) {
             console.log('success creatinog')
@@ -122,6 +119,9 @@ export class CreateComponent implements OnInit {
             setTimeout(() => {
               this.router.navigate(['role/admin'])
             }, 1000)
+          }
+          else{
+            this.toastr.warning(apiResponse['message'])
           }
         },
         (err) => {

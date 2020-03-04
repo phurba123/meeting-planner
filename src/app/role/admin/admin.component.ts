@@ -1,10 +1,8 @@
 import { Component, OnInit, ViewChild, OnDestroy, TemplateRef } from '@angular/core';
-//import { CookieService } from 'ngx-cookie-service'
 import { CalendarEvent, CalendarView, CalendarEventTimesChangedEvent } from 'angular-calendar';
 import { UserService } from 'src/app/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { CookieService } from 'ngx-cookie-service'
 import { MeetingService } from 'src/app/meeting.service';
 import { Subject } from 'rxjs'
 import { isSameMonth, isSameDay, addHours } from 'date-fns'
@@ -74,7 +72,6 @@ export class AdminComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private toastr: ToastrService,
     private router: Router,
-    private cookie: CookieService,
     private meetingService: MeetingService,
     private modal: NgbModal,
     private socketService: SocketService
@@ -82,15 +79,19 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     //console.log('inside on init')
-    this.userInfo = this.userService.getUserInfoFromLocalStorage()
-    this.receiverUserId = this.userInfo.userId
-    this.receiverUserName = this.userInfo.userName;
-    this.authToken = this.cookie.get('authToken');
+    let localStorage = this.userService.getUserInfoFromLocalStorage()
+    this.userInfo = localStorage.userInfo;
+    this.receiverUserId = localStorage.userInfo.userId
+    console.log(this.receiverUserId)
+    this.receiverUserName = localStorage.userInfo.userName;
+    this.authToken = localStorage.authToken;
+    console.log(this.authToken)
 
     if (this.userService.isAdmin(this.receiverUserName)) {
       this.verifyUser();
       this.getAllUsers();
       this.getOnlineUsers();
+      this.getUserAllMeetingFunction();
     }
     else {
       this.router.navigate(['/']);
@@ -137,7 +138,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   public getAllUsers() {
     this.userService.getAllUsers(this.authToken).subscribe(
       (apiResponse) => {
-        //console.log(apiResponse)
+        console.log(apiResponse)
         this.allUsers = apiResponse.data;
         //console.log('all users', this.allUsers)
       },
@@ -199,7 +200,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   //logout function
   public logOut() {
     console.log(this.receiverUserId)
-    this.userService.logOut(this.userInfo.userId).subscribe(
+    this.userService.logOut(this.receiverUserId,this.authToken).subscribe(
       (apiResponse) => {
         if (apiResponse['status'] === 200) {
           this.toastr.success('You are logged out', 'LogOut successfull');
@@ -207,7 +208,7 @@ export class AdminComponent implements OnInit, OnDestroy {
             this.router.navigate(['/login']);
           }, 1000);
 
-          this.deleteCookiesAndLocalStorage();
+          this.userService.removeUserInfoFromLocalStorage();
 
           //disconnect socket to be emitted when log out
           this.socketService.disconnectSocket()
@@ -253,14 +254,14 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   //updating meeting
   public updateMeeting(meetingId) {
-    console.log(meetingId);
+    //console.log(meetingId);
     this.router.navigate([`meeting/${meetingId}/update`]);
     this.modal.dismissAll()
   }//end of updating meeting
 
   //deleting meeting
   public deleteMeeting(meetingId, eventToDelete) {
-    this.meetingService.deleteMeeting(meetingId).subscribe((apiResponse) => {
+    this.meetingService.deleteMeeting(meetingId,this.authToken).subscribe((apiResponse) => {
       if (apiResponse['status'] === 200) {
         this.toastr.success(apiResponse['message']);
         setTimeout(() => {
@@ -280,11 +281,6 @@ export class AdminComponent implements OnInit, OnDestroy {
       })
   }
 
-  private deleteCookiesAndLocalStorage() {
-    //deleting local storage and cookies upon logout
-    this.userService.removeUserInfoFromLocalStorage();
-    this.cookie.delete('authToken')
-  }
 
   //close modal
   public dismissModal() {

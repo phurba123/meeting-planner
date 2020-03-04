@@ -32,24 +32,31 @@ export class UpdateComponent implements OnInit {
     private toastr: ToastrService) { }
 
   ngOnInit(): void {
-    // this.authToken = this.cookie.get('authToken');
     // this.getAllUsers()
     this.meetingId = this.activatedRoute.snapshot.paramMap.get('meetingId');
+    this.authToken = this.userService.getUserInfoFromLocalStorage().authToken;
     //console.log('meeting id is : ', this.meetingId);
     this.getSingleMeeting(this.meetingId)
 
   }
 
   private getSingleMeeting(meetingId) {
-    this.meetingService.getSingleMeetingById(meetingId).subscribe((apiResponse) => {
+    this.meetingService.getSingleMeetingById(meetingId, this.authToken).subscribe((apiResponse) => {
       console.log('apiResponse : ', apiResponse);
       if (apiResponse['status'] === 200) {
         this.meetingDetail = apiResponse['data'];
         this.setDataOfMeeting(this.meetingDetail);
       }
+      else if (apiResponse['status'] === 500) {
+        this.toastr.warning(apiResponse['message'])
+        this.router.navigate(['/error/server'])
+      }
+      else {
+        this.toastr.warning(apiResponse['message'])
+      }
     },
       (err) => {
-
+        this.toastr.error(err.err.message)
       });
   }
 
@@ -95,13 +102,20 @@ export class UpdateComponent implements OnInit {
       //if any one value is changed than just update it
       console.log(updatedMeetinObj)
 
-      this.meetingService.updateMeeting(this.meetingId, updatedMeetinObj).subscribe((apiResponse) => {
+      this.meetingService.updateMeeting(this.meetingId, updatedMeetinObj,this.authToken).subscribe((apiResponse) => {
         //console.log('api rsp ',apiResponse)
-        this.toastr.success(apiResponse['message']);
-        setTimeout(()=>
+        if (apiResponse['status'] === 200) {
+          this.toastr.success(apiResponse['message']);
+
+          setTimeout(() => {
+            this.router.navigate(['/role/admin'])
+          }, 1000)
+        }
+        else
         {
-          this.router.navigate(['/role/admin'])
-        },1000)
+          this.toastr.warning(apiResponse['message'])
+        }
+
       },
         (err) => {
           this.toastr.error(err.error.message)

@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service'
 import { CalendarEvent, CalendarView, CalendarEventTimesChangedEvent } from 'angular-calendar';
 import { isSameMonth, isSameDay } from 'date-fns'
 import { Subject } from 'rxjs'
@@ -70,7 +69,6 @@ export class NormalComponent implements OnInit {
     public userService: UserService,
     //public socketService: SocketService,
     public _route: ActivatedRoute,
-    public cookie: CookieService,
     public router: Router,
     private toastr: ToastrService,
     private socketService: SocketService,
@@ -80,13 +78,12 @@ export class NormalComponent implements OnInit {
 
   ngOnInit(): void {
 
-
-    this.authToken = this.cookie.get('authToken');
     this.remindMe = true
 
-    this.userInfo = this.userService.getUserInfoFromLocalStorage()
-    this.receiverUserId = this.userInfo.userId
-    this.receiverUserName = this.userInfo.userName;
+    let localStorage = this.userService.getUserInfoFromLocalStorage()
+    this.receiverUserId = localStorage.userInfo.userId;
+    this.receiverUserName = localStorage.userInfo.userName;
+    this.authToken=  localStorage.authToken
 
     this.checkStatus();
 
@@ -103,7 +100,7 @@ export class NormalComponent implements OnInit {
   //function to check whether user is authorized to be on this component
   public checkStatus = (): any => {
     //using if condition to check if authToken is valid or not
-    if (this.authToken === null || this.authToken === '' || this.authToken === undefined || this.authToken !== this.cookie.get('authToken')) {
+    if (this.authToken === null || this.authToken === '' || this.authToken === undefined || this.authToken !== this.authToken) {
       this.router.navigate(['/']);
       return false;
     }
@@ -124,7 +121,7 @@ export class NormalComponent implements OnInit {
 
   //logout function
   public logOut() {
-    this.userService.logOut(this.receiverUserId).subscribe(
+    this.userService.logOut(this.receiverUserId,this.authToken).subscribe(
       (apiResponse) => {
         if (apiResponse['status'] === 200) {
           this.toastr.success('You are logged out', 'LogOut successfull');
@@ -132,9 +129,8 @@ export class NormalComponent implements OnInit {
             this.router.navigate(['/login']);
           }, 1000);
 
-          //deleting local storage and cookies upon logout
+          //deleting local storage 
           this.userService.removeUserInfoFromLocalStorage();
-          this.cookie.delete('authToken');
           //disconnect socket to be emitted
           this.socketService.disconnectSocket()
 
