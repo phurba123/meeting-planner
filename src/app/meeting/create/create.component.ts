@@ -4,6 +4,7 @@ import { Location } from '@angular/common'
 import { MeetingService } from 'src/app/meeting.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router'
+import { SocketService } from 'src/app/socket.service';
 
 @Component({
   selector: 'app-create',
@@ -33,7 +34,8 @@ export class CreateComponent implements OnInit {
     public location: Location,
     private meetingService: MeetingService,
     private toastr: ToastrService,
-    private router: Router
+    private router: Router,
+    private socketService:SocketService
   ) { }
 
 
@@ -118,7 +120,9 @@ export class CreateComponent implements OnInit {
 
             setTimeout(() => {
               this.router.navigate(['role/admin'])
-            }, 1000)
+            }, 1000);
+
+            this.socketService.notifyUserOfNewMeeting(meetingObj.participantId);//notifying user of new meeting
           }
           else{
             this.toastr.warning(apiResponse['message'])

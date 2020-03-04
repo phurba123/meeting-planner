@@ -18,6 +18,17 @@ export class SocketService {
    * events to be listened
    */
 
+  //  public currentEventReminder()
+  //  {
+  //    return Observable.create((observer)=>
+  //    {
+  //      this.socket.on('current-event',(data)=>
+  //      {
+  //        observer.next(data)
+  //      })
+  //    })
+  //  }
+
   //verify user
   public verifyUser = () => {
     return Observable.create((observer) => {
@@ -37,6 +48,17 @@ export class SocketService {
 
   }//end onlineUserList
 
+  public getNotifiedOfMeeting(userId)
+  {
+    return Observable.create((observer)=>
+    {
+      this.socket.on(userId,(data)=>
+      {
+        observer.next(data)
+      })
+    })
+  }
+
    /**
    * end of events to be listened
    */
@@ -49,22 +71,34 @@ export class SocketService {
 
   //set user
   public setUser = (token) => {
-    this.socket.emit('set-user', token)
-  }//end of set user
+  this.socket.emit('set-user', (token))
+}//end of set user
 
   //disconnecting socket
   public disconnectSocket = () => {
-    return Observable.create((observer) => {
-      this.socket.emit('disconnect', () => {
-        observer.next();
-      });
-    });//end observable
+  return Observable.create((observer) => {
+    this.socket.emit('disconnect', () => {
+      observer.next();
+    });
+  });//end observable
 
-  }//end socket disconnect
+}//end socket disconnect
+
+  //notifying users abouot meeeting creation
+  public notifyUserOfNewMeeting(participantId)
+{
+  this.socket.emit('new-meeting', (participantId));
+}
+
+  //notify users about update
+  public notifyUsersAboutUpdate(data)
+{
+  this.socket.emit('update-info', data)
+}
 
 
 
-  public exitSocket = () =>{
-    this.socket.disconnect();
-  }// end exit socket
+  public exitSocket = () => {
+  this.socket.disconnect();
+}// end exit socket
 }

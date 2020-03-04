@@ -4,6 +4,7 @@ import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MeetingService } from 'src/app/meeting.service';
 import { ToastrService } from 'ngx-toastr'
+import { SocketService } from 'src/app/socket.service';
 
 @Component({
   selector: 'app-update',
@@ -29,7 +30,8 @@ export class UpdateComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private meetingService: MeetingService,
-    private toastr: ToastrService) { }
+    private toastr: ToastrService,
+    private socketService:SocketService) { }
 
   ngOnInit(): void {
     // this.getAllUsers()
@@ -109,7 +111,11 @@ export class UpdateComponent implements OnInit {
 
           setTimeout(() => {
             this.router.navigate(['/role/admin'])
-          }, 1000)
+          }, 1000);
+
+          //notify user about update with reference to topic
+          this.socketService.notifyUsersAboutUpdate(this.meetingDetail.participantId);
+          
         }
         else
         {

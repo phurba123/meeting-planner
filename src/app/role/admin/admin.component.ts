@@ -50,6 +50,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   public receiverUserName;
   public allUsers: any
   public userInfo;
+  public selectedUserId;
   public onlineUsers: any[] = [];
 
   public activeDayIsOpen: boolean = true;
@@ -88,14 +89,17 @@ export class AdminComponent implements OnInit, OnDestroy {
     console.log(this.authToken)
 
     if (this.userService.isAdmin(this.receiverUserName)) {
+
+      this.getUserAllMeetingFunction(this.receiverUserId);
       this.verifyUser();
       this.getAllUsers();
       this.getOnlineUsers();
-      this.getUserAllMeetingFunction();
     }
     else {
       this.router.navigate(['/']);
     }
+
+    
   }
 
   //verifying user
@@ -149,9 +153,9 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   //getting selected user meetings
   public getSelectedUserMeeting(userId) {
-    this.receiverUserId = userId;
+    this.selectedUserId = userId;
     //console.log('getting selected user meeting')
-    this.getUserAllMeetingFunction()
+    this.getUserAllMeetingFunction(this.selectedUserId)
 
   }
 
@@ -163,9 +167,9 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.activeDayIsOpen = false;
   }
 
-  getUserAllMeetingFunction() {
+  getUserAllMeetingFunction(userId) {
     this.events = [];
-    this.meetingService.getUserAllMeeting(this.receiverUserId, this.authToken).subscribe(
+    this.meetingService.getUserAllMeeting(userId, this.authToken).subscribe(
       (apiResponse) => {
         if (apiResponse.status === 200) {
           // console.log(apiResponse.data);
@@ -200,7 +204,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   //logout function
   public logOut() {
     console.log(this.receiverUserId)
-    this.userService.logOut(this.receiverUserId,this.authToken).subscribe(
+    this.userService.logOut(this.authToken).subscribe(
       (apiResponse) => {
         if (apiResponse['status'] === 200) {
           this.toastr.success('You are logged out', 'LogOut successfull');

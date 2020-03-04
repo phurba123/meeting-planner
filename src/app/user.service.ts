@@ -42,13 +42,9 @@ export class UserService implements OnInit {
   }//end of login
 
   //for logout
-  public logOut(userId,authToken) {
+  public logOut(authToken) {
     const params = new HttpParams()
-      .set('userId', userId)
       .set('authToken',authToken)
-
-    let data = {};
-    console.log('inside logout')
     return this.http.post(`${this.backendUrl}/logout`, params);
   }
 
