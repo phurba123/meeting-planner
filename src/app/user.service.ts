@@ -9,7 +9,7 @@ export class UserService implements OnInit {
   ngOnInit() {
     console.log('userservice oninit is called')
   }
-  private backendUrl = 'http://localHost:3000/api/v1/user';
+  private backendUrl = 'http://plannerapi.phursang.xyz/api/v1/user';
 
   private authToken;
 
