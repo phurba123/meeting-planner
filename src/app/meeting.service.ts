@@ -7,7 +7,7 @@ import {Observable} from 'rxjs'
 })
 export class MeetingService {
 
-  private baseUrl = 'http://localhost:3000/api/v1/meeting';
+  private baseUrl = 'http://plannerapi.phursang.xyz/api/v1/meeting';
 
   constructor(
     private http:HttpClient
